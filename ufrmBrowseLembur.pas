@@ -1,0 +1,201 @@
+unit ufrmBrowseLembur;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ufrmCxBrowse, Menus, cxLookAndFeelPainters, cxStyles,
+  dxSkinsCore, dxSkinBlack, dxSkinBlue, dxSkinCaramel, dxSkinCoffee,
+  dxSkinDarkSide,
+  dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
+  dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+  dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinPumpkin,
+  dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue,
+  dxSkinscxPCPainter, cxCustomData, cxGraphics, cxFilter, cxData,
+  cxDataStorage, cxEdit, DB, cxDBData, FMTBcd, Provider, SqlExpr, ImgList,
+  ComCtrls, StdCtrls, cxGridLevel, cxClasses, cxControls, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
+  cxButtons, ExtCtrls, AdvPanel, DBClient, cxLookAndFeels,
+  dxSkinsDefaultPainters, dxSkinDarkRoom, dxSkinFoggy, dxSkinSeven,
+  dxSkinSharp, DateUtils;
+
+type
+  TfrmBrowseLembur = class(TfrmCxBrowse)
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
+  procedure btnRefreshClick(Sender: TObject);
+  procedure FormShow(Sender: TObject);
+  procedure cxButton2Click(Sender: TObject);
+  procedure cxButton1Click(Sender: TObject);
+  procedure cxButton6Click(Sender: TObject);
+  procedure cxButton4Click(Sender: TObject);
+  procedure cxGrdMasterStylesGetContentStyle(
+      Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
+      AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmBrowseLembur: TfrmBrowseLembur;
+
+implementation
+   uses ufrmLembur, uModuleConnection, ufrmMenu, Ulib;
+{$R *.dfm}
+
+procedure TfrmBrowseLembur.btnRefreshClick(Sender: TObject);
+begin
+  Self.SQLMaster := 'SELECT a.lem_nomor Nomor, a.lem_kar_nik NIK, b.kar_nama Nama, c.nm_jabat Jabatan, d.nm_dept Departmen, e.nm_unit Unit, '
+                    + ' a.lem_tanggal Tanggal, a.lem_jammulai JamMulai, a.lem_jamakhir JamAkhir, lem_keterangan Keterangan '
+                    + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out '
+                    + ' FROM tlembur a '
+                    + ' INNER JOIN tkaryawan b ON a.lem_kar_nik = b.kar_nik '
+                    + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
+                    + ' INNER JOIN tdept d ON d.kd_dept = b.kar_kd_dept '
+                    + ' INNER JOIN tunit e ON e.kd_unit = b.kar_kd_unit '
+                    + ' LEFT JOIN tabsensitampung f ON (f.kar_nik = a.lem_kar_nik AND DATE(f.tanggal) = a.lem_tanggal) '
+                    + ' WHERE b.kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT)
+                    + ' AND a.lem_tanggal between ' + QuotD(startdate.DateTime) + ' and ' + QuotD(enddate.DateTime)
+                    + ' GROUP BY a.lem_nomor, a.lem_kar_nik, b.kar_nama, c.nm_jabat, d.nm_dept, e.nm_unit, '
+                    + ' a.lem_tanggal, a.lem_jammulai, a.lem_jamakhir, a.lem_keterangan';
+  inherited;
+  cxGrdMaster.ApplyBestFit();
+//  cxGrdMaster.Columns[0].Width :=100;
+//  cxGrdMaster.Columns[1].Width :=200;
+end;
+
+procedure TfrmBrowseLembur.FormShow(Sender: TObject);
+begin
+  ShowWindowAsync(Handle, SW_MAXIMIZE);
+  inherited;
+  btnRefreshClick(Self);
+end;
+
+procedure TfrmBrowseLembur.cxButton2Click(Sender: TObject);
+var
+  frmlembur: TfrmLembur;
+begin
+  inherited;
+  if ActiveMDIChild.Caption <> 'Lembur' then
+  begin
+    frmlembur  := frmmenu.ShowForm(TfrmLembur) as TfrmLembur;
+    frmlembur.edtNIK.SetFocus;
+  end;
+  
+  frmlembur.Show;
+end;
+
+procedure TfrmBrowseLembur.cxButton1Click(Sender: TObject);
+var
+  frmlembur: TfrmLembur;
+begin
+  inherited;
+  If CDSMaster.FieldByname('Nomor').IsNull then exit;
+
+  if ActiveMDIChild.Caption <> 'Lembur' then
+  begin
+    // ShowForm(TfrmBrowseBarang).Show;
+    frmlembur := frmmenu.ShowForm(TfrmLembur) as TfrmLembur;
+    frmlembur.ID := CDSMaster.FieldByname('Nomor').AsString;
+    frmlembur.FLAGEDIT := True;
+    frmlembur.edtNomor.Text := CDSMaster.FieldByname('Nomor').AsString;
+    frmlembur.loaddata(CDSMaster.FieldByname('Nomor').AsString);
+  end;
+  
+  frmlembur.Show;
+end;
+
+procedure TfrmBrowseLembur.cxButton6Click(Sender: TObject);
+begin
+  inherited;
+  refreshdata;
+end;
+
+procedure TfrmBrowseLembur.cxButton4Click(Sender: TObject);
+var
+  s:string;
+begin
+  inherited;
+  try
+    if not cekdelete(frmMenu.KDUSER,'frmijin') then
+    begin
+      MessageDlg('Anda tidak berhak Menghapus di Modul ini',mtWarning, [mbOK],0);
+      Exit;
+    End;
+
+    if MessageDlg('Yakin ingin hapus ?',mtCustom,
+                            [mbYes,mbNo], 0)= mrNo
+    then Exit ;
+
+    s:='delete from tlembur '
+    + ' where lem_nomor = ' + quot(CDSMaster.FieldByname('Nomor').AsString) + ';' ;
+
+    EnsureConnected(frmMenu.MyConnection1);
+    ExecSQLDirect(frmMenu.MyConnection1,s);
+
+    CDSMaster.Delete;
+  except
+    MessageDlg('Gagal Hapus',mtError, [mbOK],0);
+    Exit;
+  end;
+end;
+
+procedure TfrmBrowseLembur.cxGrdMasterStylesGetContentStyle(
+  Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
+  AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
+var
+  AColumn1, AColumn2, AColumn3, AColumn4: TcxCustomGridTableItem;
+  JamMulaiTime, JamAkhirTime, JamOutTime: TDateTime;
+  JamMulaiFull, JamAkhirFull, JamOutFull, RecDate: TDateTime;
+  sJamOut: string;
+  deltaSeconds: Int64;
+begin
+  inherited;
+  AColumn1 := (Sender as TcxGridDBTableView).GetColumnByFieldName('JamMulai');
+  AColumn2 := (Sender as TcxGridDBTableView).GetColumnByFieldName('JamAkhir');
+  AColumn3 := (Sender as TcxGridDBTableView).GetColumnByFieldName('Jam_out');
+  AColumn4 := (Sender as TcxGridDBTableView).GetColumnByFieldName('Tanggal');
+
+  if (AColumn1 = nil) or (AColumn2 = nil) or (AColumn3 = nil) or (AColumn4 = nil) then
+    Exit;
+  if (ARecord = nil) or (AItem = nil) then
+    Exit;
+
+  sJamOut := Trim(VarToStr(ARecord.Values[AColumn3.Index]));
+  if sJamOut = '' then
+    Exit;
+
+  JamMulaiTime := cVarToTimeSafe(ARecord.Values[AColumn1.Index]);
+  JamAkhirTime := cVarToTimeSafe(ARecord.Values[AColumn2.Index]);
+  JamOutTime   := cVarToTimeSafe(ARecord.Values[AColumn3.Index]);
+
+  RecDate := Trunc(cVarToTimeSafe(ARecord.Values[AColumn4.Index]));
+
+  JamMulaiFull := RecDate + TimeOf(JamMulaiTime);
+  JamAkhirFull := RecDate + TimeOf(JamAkhirTime);
+  JamOutFull   := RecDate + TimeOf(JamOutTime);
+
+//  if TimeOf(JamAkhirTime) < TimeOf(JamMulaiTime) then
+//    JamAkhirFull := JamAkhirFull + 1;
+
+//  if TimeOf(JamOutTime) < TimeOf(JamMulaiTime) then
+//  begin
+//
+//    deltaSeconds := SecondsBetween(TimeOf(JamMulaiTime), TimeOf(JamOutTime));
+//    // Kalau selisih sangat besar (> 12 jam) anggap JamOut di hari berikutnya
+//    if deltaSeconds > (12 * 3600) then
+//      JamOutFull := JamOutFull + 1
+//    else
+//      ; 
+//  end;
+
+  // bandingkan full datetime
+  if JamOutFull < JamAkhirFull then
+    AStyle := cxStyle1;
+end;
+
+end.

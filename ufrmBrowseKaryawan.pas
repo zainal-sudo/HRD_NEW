@@ -1,0 +1,136 @@
+unit ufrmBrowseKaryawan;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ufrmCxBrowse, Menus, cxLookAndFeelPainters, cxStyles,
+  dxSkinsCore, dxSkinBlack, dxSkinBlue, dxSkinCaramel, dxSkinCoffee,
+  dxSkinDarkSide,
+  dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
+  dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+  dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinPumpkin,
+  dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue,
+  dxSkinscxPCPainter, cxCustomData, cxGraphics, cxFilter, cxData,
+  cxDataStorage, cxEdit, DB, cxDBData, FMTBcd, Provider, SqlExpr, ImgList,
+  ComCtrls, StdCtrls, cxGridLevel, cxClasses, cxControls, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
+  cxButtons, ExtCtrls, AdvPanel, DBClient, cxLookAndFeels,
+  dxSkinsDefaultPainters, dxSkinDarkRoom, dxSkinFoggy, dxSkinSeven,
+  dxSkinSharp;
+
+type
+  TfrmBrowseKaryawan = class(TfrmCxBrowse)
+  procedure btnRefreshClick(Sender: TObject);
+  procedure FormShow(Sender: TObject);
+  procedure cxButton2Click(Sender: TObject);
+  procedure cxButton1Click(Sender: TObject);
+  procedure cxButton6Click(Sender: TObject);
+  procedure cxButton4Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmBrowseKaryawan: TfrmBrowseKaryawan;
+
+implementation
+   uses ufrmjabatan,uModuleConnection, ufrmMenu, ufrmKaryawan;
+{$R *.dfm}
+
+procedure TfrmBrowseKaryawan.btnRefreshClick(Sender: TObject);
+begin
+  Self.SQLMaster := 'SELECT kar_nik NIK, kar_nama Nama, kar_alamat Alamat, kar_telp Telp, kar_tgl_masuk Masuk, kar_tempatlahir TempatLahir, '
+                    + ' kar_tgllahir TglLahir, c.nm_jabat Jabatan, d.nm_dept Departmen, nm_unit Unit '
+                    + ' FROM tkaryawan a '
+                    + ' INNER JOIN tunit b ON b.kd_unit = a.kar_kd_unit '
+                    + ' INNER JOIN tjabatan c ON c.kd_jabat = a.kar_kd_jabat '
+                    + ' INNER JOIN tdept d ON d.kd_dept = a.kar_kd_dept '
+                    + ' WHERE a.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT);
+  inherited;
+  cxGrdMaster.ApplyBestFit();
+//  cxGrdMaster.Columns[0].Width :=100;
+//  cxGrdMaster.Columns[1].Width :=200;
+end;
+
+procedure TfrmBrowseKaryawan.FormShow(Sender: TObject);
+begin
+  ShowWindowAsync(Handle, SW_MAXIMIZE);
+  inherited;
+  btnRefreshClick(Self);
+end;
+
+procedure TfrmBrowseKaryawan.cxButton2Click(Sender: TObject);
+var
+  frmkaryawan: TfrmKaryawan;
+begin
+  inherited;
+  if ActiveMDIChild.Caption <> 'Master Karyawan' then
+  begin
+    frmkaryawan  := frmmenu.ShowForm(TfrmKaryawan) as TfrmKaryawan;
+    frmkaryawan.edtNIK.SetFocus;
+  end;
+  frmkaryawan.Show;
+end;
+
+procedure TfrmBrowseKaryawan.cxButton1Click(Sender: TObject);
+var
+  frmkaryawan: TfrmKaryawan;
+begin
+  inherited;
+  If CDSMaster.FieldByname('NIK').IsNull then exit;
+  
+  if ActiveMDIChild.Caption <> 'Master Karyawan' then
+  begin
+    // ShowForm(TfrmBrowseBarang).Show;
+    frmkaryawan  := frmmenu.ShowForm(TfrmKaryawan) as TfrmKaryawan;
+    frmkaryawan.ID := CDSMaster.FieldByname('NIK').AsString;
+    frmkaryawan.FLAGEDIT := True;
+    frmkaryawan.edtNIK.Text := CDSMaster.FieldByname('NIK').AsString;
+    frmkaryawan.loaddata(CDSMaster.FieldByname('NIK').AsString);
+    frmkaryawan.edtNIK.Enabled := False;
+  end;
+  
+  frmkaryawan.Show;
+end;
+
+procedure TfrmBrowseKaryawan.cxButton6Click(Sender: TObject);
+begin
+  inherited;
+  refreshdata;
+end;
+
+procedure TfrmBrowseKaryawan.cxButton4Click(Sender: TObject);
+var
+  s:string;
+begin
+  inherited;
+  try
+    if not cekdelete(frmMenu.KDUSER, 'frmkaryawan') then
+    begin
+      MessageDlg('Anda tidak berhak Menghapus di Modul ini', mtWarning, [mbOK],0);
+      Exit;
+    End;
+
+    if MessageDlg('Yakin ingin hapus ?', mtCustom,
+                              [mbYes,mbNo], 0)= mrNo
+    then Exit;
+
+    s := 'DELETE FROM tkaryawan '
+         + ' WHERE kar_nik = ' + quot(CDSMaster.FieldByname('NIK').AsString) + ';' ;
+
+    EnsureConnected(frmMenu.MyConnection1);
+    ExecSQLDirect(frmMenu.MyConnection1,s);
+
+    CDSMaster.Delete;
+  except
+    MessageDlg('Gagal Hapus',mtError, [mbOK],0);
+    Exit;
+  end;
+end;
+
+end.

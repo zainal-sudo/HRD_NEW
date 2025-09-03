@@ -1,0 +1,72 @@
+object frmMenu: TfrmMenu
+  Left = 115
+  Top = 254
+  Width = 1331
+  Height = 827
+  Caption = 'HRD New'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  FormStyle = fsMDIForm
+  Menu = MainMenu1
+  OldCreateOrder = False
+  WindowState = wsMaximized
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object MyConnection1: TMyConnection
+    Left = 504
+    Top = 80
+  end
+  object MainMenu1: TMainMenu
+    Left = 232
+    Top = 56
+    object File1: TMenuItem
+      Caption = 'File'
+    end
+    object Master1: TMenuItem
+      Caption = 'Master'
+      object Karyawan1: TMenuItem
+        Caption = 'Karyawan'
+        OnClick = Karyawan1Click
+      end
+      object Jabatan1: TMenuItem
+        Caption = 'Jabatan'
+        OnClick = Jabatan1Click
+      end
+      object Departemen1: TMenuItem
+        Caption = 'Departemen'
+        OnClick = Departemen1Click
+      end
+      object Unit1: TMenuItem
+        Caption = 'Unit'
+        OnClick = Unit1Click
+      end
+    end
+    object ransaksi1: TMenuItem
+      Caption = 'Transaksi'
+      object ProsesGaji1: TMenuItem
+        Caption = 'Proses Gaji'
+      end
+      object Ijin1: TMenuItem
+        Caption = 'Ijin'
+        OnClick = Ijin1Click
+      end
+      object Lembur1: TMenuItem
+        Caption = 'Lembur'
+        OnClick = Lembur1Click
+      end
+    end
+    object Laporan1: TMenuItem
+      Caption = 'Laporan'
+      object Absensi1: TMenuItem
+        Caption = 'Absensi'
+        OnClick = Absensi1Click
+      end
+    end
+  end
+end

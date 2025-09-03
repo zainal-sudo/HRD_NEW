@@ -1,0 +1,218 @@
+unit ufrmMenu;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, DB, DBAccess, MyAccess;
+
+type
+  TfrmMenu = class(TForm)
+    MyConnection1: TMyConnection;
+    MainMenu1: TMainMenu;
+    File1: TMenuItem;
+    Master1: TMenuItem;
+    ransaksi1: TMenuItem;
+    Karyawan1: TMenuItem;
+    Jabatan1: TMenuItem;
+    ProsesGaji1: TMenuItem;
+    Laporan1: TMenuItem;
+    Absensi1: TMenuItem;
+    Departemen1: TMenuItem;
+    Unit1: TMenuItem;
+    Ijin1: TMenuItem;
+    Lembur1: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure bacafile;
+    procedure Karyawan1Click(Sender: TObject);
+    function ShowForm(AFormClass: TFormClass): TForm;
+    procedure Jabatan1Click(Sender: TObject);
+    procedure Departemen1Click(Sender: TObject);
+    procedure Unit1Click(Sender: TObject);
+    procedure Ijin1Click(Sender: TObject);
+    procedure Absensi1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Lembur1Click(Sender: TObject);
+  private
+    aDatabase: string;
+    aHost: string;
+    apassword: string;
+    auser: string;
+    aport : Integer;
+    { Private declarations }
+  public
+    { Public declarations }
+    KDUSER, KDUNIT, aurl:string;
+  end;
+
+var
+  frmMenu: TfrmMenu;
+
+  sqlbantuan : string;
+  keyfield: String;
+  displayfield: String;
+  sqlfilter: String;
+
+
+implementation
+uses uModuleConnection, ufrmBrowseJabatan, ufrmBrowseKaryawan, ufrmBrowseDepartemen, ufrmUser, UfrmLogin, ufrmBrowseUnit,
+ufrmBrowseIjin, ufrmlapabsensi, ufrmBrowseLembur;
+
+{$R *.dfm}
+
+procedure TfrmMenu.FormCreate(Sender: TObject);
+begin
+//  bacafile;
+//  MyConnection1.Username := auser;
+//  MyConnection1.Password := apassword;
+//  MyConnection1.Database := aDatabase;
+//  MyConnection1.Server := aHost ;
+//  MyConnection1.Port := aport;
+//  MyConnection1.Connected;
+//
+//  ThousandSeparator:=',';
+//  ShortDateFormat := 'M/d/yyyy';
+//  DateSeparator   := '/';
+//  DecimalSeparator:= '.';
+//  kduser:='pusat';
+//  // KDUNIT := '%';
+//  frmLogin.Show;
+end;
+
+procedure TfrmMenu.bacafile;
+var
+  ltemp : TStringList;
+begin
+  ltemp := TStringList.Create;
+  ltemp.loadfromfile(ExtractFileDir(application.ExeName) + '\' + 'default.cfg');
+  aHost     := ltemp[0];
+  aDatabase := ltemp[1];
+  auser     := ltemp[2];
+  apassword := ltemp [3];
+  aport := StrToInt(ltemp [4]);
+  aurl := ltemp[6];
+
+  ltemp.free;
+end;
+
+procedure TfrmMenu.Karyawan1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Karyawan' then
+  begin
+    ShowForm(TfrmBrowseKaryawan).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+function TfrmMenu.ShowForm(AFormClass: TFormClass): TForm;
+var
+  aForm: TForm;
+  i: Integer;
+begin
+  inherited;
+
+  if ( not ceKVIEW(frmMenu.KDUSER, AFormClass.ClassName)) then
+  begin
+       MessageDlg('Anda tidak berhak Membuka di Modul ini',mtWarning, [mbOK],0);
+     Exit;
+  End;
+
+  for i := 0 to MDIChildCount - 1 do
+  begin
+    if MDIChildren[i].ClassName = AFormClass.ClassName then
+    begin
+      Result := MDIChildren[i];
+      // mdiChildrenTabs.TabIndex := GetTabSetIndex(Result);
+      Exit;
+    end;
+  end;
+
+  aForm := AFormClass.Create(Application);
+  aForm.FormStyle := fsMDIChild;
+  // aForm.Position := poDefault;
+
+  aForm.WindowState := wsMaximized;
+  Result := (aForm as AFormClass);
+end;
+
+procedure TfrmMenu.Jabatan1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Jabatan' then
+  begin
+    ShowForm(TfrmBrowseJabatan).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.Departemen1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Master Departemen' then
+  begin
+    ShowForm(TfrmBrowseDepartemen).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.Unit1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Unit' then
+  begin
+    ShowForm(TfrmBrowseUnit).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.Ijin1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Ijin' then
+  begin
+    ShowForm(TfrmBrowseIjin).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.Absensi1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Laporan Absensi' then
+  begin
+    ShowForm(TfrmLapAbsensi).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.FormShow(Sender: TObject);
+begin
+  bacafile;
+  MyConnection1.Username := auser;
+  MyConnection1.Password := apassword;
+  MyConnection1.Database := aDatabase;
+  MyConnection1.Server := aHost ;
+  MyConnection1.Port := aport;
+  MyConnection1.Connected;
+
+  ThousandSeparator:=',';
+  ShortDateFormat := 'M/d/yyyy';
+  DateSeparator   := '/';
+  DecimalSeparator:= '.';
+  // kduser:='pusat';
+  // KDUNIT := '%';
+  frmLogin.Show;
+end;
+
+procedure TfrmMenu.Lembur1Click(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Lembur' then
+  begin
+    ShowForm(TfrmBrowseLembur).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+end.

@@ -1,0 +1,100 @@
+unit ufrmLapAbsensi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ufrmCxBrowse, Menus, cxLookAndFeelPainters, cxStyles,
+  dxSkinsCore, dxSkinBlack, dxSkinBlue, dxSkinCaramel, dxSkinCoffee,
+  dxSkinDarkSide,
+  dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian,
+  dxSkinLiquidSky, dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
+  dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+  dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinPumpkin,
+  dxSkinSilver, dxSkinSpringTime, dxSkinStardust,
+  dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue,
+  dxSkinscxPCPainter, cxCustomData, cxGraphics, cxFilter, cxData,
+  cxDataStorage, cxEdit, DB, cxDBData, FMTBcd, Provider, SqlExpr, ImgList,
+  ComCtrls, StdCtrls, cxGridLevel, cxClasses, cxControls, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
+  cxButtons, ExtCtrls, AdvPanel, DBClient, cxLookAndFeels,
+  dxSkinsDefaultPainters, dxSkinDarkRoom, dxSkinFoggy, dxSkinSeven,
+  dxSkinSharp;
+
+type
+  TfrmLapAbsensi = class(TfrmCxBrowse)
+    PopupMenu1: TPopupMenu;
+    ransaksiIjin1: TMenuItem;
+    EditAbsensi1: TMenuItem;
+    CheckBox1: TCheckBox;
+  procedure btnRefreshClick(Sender: TObject);
+  procedure FormShow(Sender: TObject);
+  procedure cxButton6Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLapAbsensi: TfrmLapAbsensi;
+
+implementation
+   uses  ufrmMenu, uModuleConnection;
+{$R *.dfm}
+
+procedure TfrmLapAbsensi.btnRefreshClick(Sender: TObject);
+var
+  asakit :string;
+  aijin: string;
+  aalpha:string;
+  asetengahhari:string;
+begin
+    Self.SQLMaster := ' WITH RECURSIVE dates AS ('
++ '     SELECT DATE('+quotd(startdate.datetime)+') AS dt '
++ '     UNION ALL'
++ '     SELECT DATE_ADD(dt, INTERVAL 1 DAY)'
++ '     FROM dates'
++ '     WHERE dt < '+quotd(enddate.datetime)
++ ' )'
++ ' SELECT'
++ '     d.dt AS Tanggal,DAYNAME(d.dt) AS Hari,'
++ '     emp.kar_nik Nik,kar_nama Nama,nm_jabat Jabatan,nm_unit Nama_Unit,'
++ '     MIN(CASE WHEN e.status_absen = 1 THEN TIME(e.tanggal) END) AS Jam_in,'
++ '     MAX(CASE WHEN e.status_absen in (1,2) THEN TIME(e.tanggal) END) AS Jam_out'
++ ' FROM dates d'
++ ' CROSS JOIN (SELECT DISTINCT kar_nik FROM tabsensitampung WHERE kar_nik <> ""  ) emp'
++ ' LEFT JOIN tabsensitampung e'
++ '     ON DATE(e.tanggal) = d.dt'
++ '     AND e.kar_nik = emp.kar_nik'
++ ' LEFT JOIN tkaryawan x ON x.kar_Nik=emp.kar_nik    AND kar_pengecualian=0'
++ ' LEFT JOIN tjabatan y ON x.kar_kd_jabat=y.kd_jabat '
++ ' LEFT JOIN tunit z ON z.kd_unit=x.kar_kd_unit '
++ ' where kar_status_aktif=1 AND a.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT)
++ ' GROUP BY emp.kar_nik, d.dt'
++ ' ORDER BY emp.kar_nik, d.dt';
+
+    inherited;
+    cxGrdMaster.ApplyBestFit();
+    cxGrdMaster.Columns[0].Width :=100;
+    cxGrdMaster.Columns[1].Width :=200;
+//    CDSMaster.FieldByName('Keterangan').Size := 200;
+    CDSMaster.First;
+    
+
+end;
+
+procedure TfrmLapAbsensi.FormShow(Sender: TObject);
+begin
+    ShowWindowAsync(Handle, SW_MAXIMIZE);
+  inherited;
+  btnRefreshClick(Self);
+ end;
+
+procedure TfrmLapAbsensi.cxButton6Click(Sender: TObject);
+begin
+  inherited;
+  refreshdata;
+end;
+
+end.
