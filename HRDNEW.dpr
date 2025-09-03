@@ -22,7 +22,8 @@ uses
   ufrmIjin in 'ufrmIjin.pas' {frmIjin},
   ufrmLapAbsensi in 'ufrmLapAbsensi.pas',
   ufrmBrowseLembur in 'ufrmBrowseLembur.pas' {frmBrowseLembur},
-  ufrmLembur in 'ufrmLembur.pas' {frmLembur};
+  ufrmLembur in 'ufrmLembur.pas' {frmLembur},
+  uFrmPreviewImage in 'bantu\uFrmPreviewImage.pas' {frmPrevImg};
 
 {$R *.res}
 

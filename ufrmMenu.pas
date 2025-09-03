@@ -14,7 +14,7 @@ uses
   dxSkinStardust, dxSkinSummer2008, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinXmas2008Blue, dxSkinsdxNavBar2Painter,
   dxNavBarCollns, cxClasses, dxNavBarBase, ImgList, cxControls, dxNavBar,
-  dxDockPanel;
+  dxDockPanel, ComCtrls;
 
 type
   TfrmMenu = class(TForm)
@@ -45,6 +45,9 @@ type
     dxLembur: TdxNavBarItem;
     dxNavBar1Group1: TdxNavBarGroup;
     dxNavBar1Group2: TdxNavBarGroup;
+    dxNavBar1Group3: TdxNavBarGroup;
+    dxAbsensi: TdxNavBarItem;
+    StatusBar1: TStatusBar;
     procedure FormCreate(Sender: TObject);
     procedure bacafile;
     procedure Karyawan1Click(Sender: TObject);
@@ -57,6 +60,12 @@ type
     procedure FormShow(Sender: TObject);
     procedure Lembur1Click(Sender: TObject);
     procedure dxDepartemenClick(Sender: TObject);
+    procedure dxIjinClick(Sender: TObject);
+    procedure dxJabatanClick(Sender: TObject);
+    procedure dxKaryawanClick(Sender: TObject);
+    procedure dxLemburClick(Sender: TObject);
+    procedure dxUnitClick(Sender: TObject);
+    procedure dxAbsensiClick(Sender: TObject);
   private
     aDatabase: string;
     aHost: string;
@@ -220,6 +229,9 @@ begin
   MyConnection1.Port := aport;
   MyConnection1.Connected;
 
+  StatusBar1.Panels[1].Text := 'Connected  to ' + aHost;
+  StatusBar1.Panels[2].Text := 'Database  ' + aDatabase;
+
   ThousandSeparator:=',';
   ShortDateFormat := 'M/d/yyyy';
   DateSeparator   := '/';
@@ -241,10 +253,72 @@ end;
 
 procedure TfrmMenu.dxDepartemenClick(Sender: TObject);
 begin
-  if ActiveMDIChild.Caption <> 'Browse Departemen' then
+  if ActiveMDIChild.Caption <> 'Master Departemen' then
   begin
     ShowForm(TfrmBrowseDepartemen).Show;
-  end;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxIjinClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Ijin' then
+  begin
+    ShowForm(TfrmBrowseIjin).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxJabatanClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Jabatan' then
+  begin
+    ShowForm(TfrmBrowseJabatan).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxKaryawanClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Karyawan' then
+  begin
+    ShowForm(TfrmBrowseKaryawan).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxLemburClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Lembur' then
+  begin
+    ShowForm(TfrmBrowseLembur).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxUnitClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Browse Unit' then
+  begin
+    ShowForm(TfrmBrowseUnit).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxAbsensiClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Laporan Absensi' then
+  begin
+    ShowForm(TfrmLapAbsensi).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
 end;
 
 end.

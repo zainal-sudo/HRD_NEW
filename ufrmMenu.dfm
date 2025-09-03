@@ -1,8 +1,8 @@
 object frmMenu: TfrmMenu
-  Left = 146
-  Top = 88
+  Left = 112
+  Top = 243
   Width = 1337
-  Height = 827
+  Height = 826
   Caption = 'HRD New'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,17 +21,17 @@ object frmMenu: TfrmMenu
   object dxDockSite1: TdxDockSite
     Left = 0
     Top = 0
-    Width = 249
-    Height = 768
+    Width = 209
+    Height = 748
     Align = alLeft
     DockType = 0
-    OriginalWidth = 249
-    OriginalHeight = 768
+    OriginalWidth = 209
+    OriginalHeight = 748
     object dxLayoutDockSite1: TdxLayoutDockSite
       Left = 0
       Top = 0
-      Width = 249
-      Height = 768
+      Width = 209
+      Height = 748
       DockType = 1
       OriginalWidth = 300
       OriginalHeight = 200
@@ -39,8 +39,8 @@ object frmMenu: TfrmMenu
     object dxDockPanel1: TdxDockPanel
       Left = 0
       Top = 0
-      Width = 249
-      Height = 768
+      Width = 209
+      Height = 748
       AllowFloating = True
       AutoHide = False
       Caption = 'All Menu'
@@ -51,10 +51,15 @@ object frmMenu: TfrmMenu
       object dxNavBar1: TdxNavBar
         Left = 0
         Top = 0
-        Width = 245
-        Height = 746
+        Width = 205
+        Height = 726
         Align = alClient
         Color = clGreen
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -24
+        Font.Name = 'Trebuchet MS'
+        Font.Style = []
         ActiveGroupIndex = 0
         TabOrder = 0
         View = 19
@@ -89,12 +94,23 @@ object frmMenu: TfrmMenu
               Item = dxLembur
             end>
         end
+        object dxNavBar1Group3: TdxNavBarGroup
+          Caption = 'Reports'
+          SelectedLinkIndex = -1
+          TopVisibleLinkIndex = 0
+          Links = <
+            item
+              Item = dxAbsensi
+            end>
+        end
         object dxKaryawan: TdxNavBarItem
           Caption = 'Karyawan'
           SmallImageIndex = 3
+          OnClick = dxKaryawanClick
         end
         object dxJabatan: TdxNavBarItem
           Caption = 'Jabatan'
+          OnClick = dxJabatanClick
         end
         object dxDepartemen: TdxNavBarItem
           Caption = 'Departemen'
@@ -102,15 +118,44 @@ object frmMenu: TfrmMenu
         end
         object dxUnit: TdxNavBarItem
           Caption = 'Unit'
+          OnClick = dxUnitClick
         end
         object dxIjin: TdxNavBarItem
           Caption = 'Ijin'
+          OnClick = dxIjinClick
         end
         object dxLembur: TdxNavBarItem
           Caption = 'Lembur'
+          OnClick = dxLemburClick
+        end
+        object dxAbsensi: TdxNavBarItem
+          Caption = 'Absensi'
+          OnClick = dxAbsensiClick
         end
       end
     end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 748
+    Width = 1321
+    Height = 19
+    Panels = <
+      item
+        Width = 200
+      end
+      item
+        Width = 200
+      end
+      item
+        Width = 300
+      end
+      item
+        Width = 200
+      end
+      item
+        Width = 50
+      end>
   end
   object MyConnection1: TMyConnection
     Left = 504

@@ -164,7 +164,8 @@ function Quot(aString : String) : String;
     TcxGridDBTableView);
 function UploadFile(const AFilePath, AURL, APrefix: string; out AFilename, AErrorMsg: string): Boolean;
 function GetJsonValue(const AJson, AKey: string): string;
-procedure LoadImageFromURL(const AURL: string; AImage: TImage);    
+procedure LoadImageFromURL(const AURL: string; AImage: TImage);
+procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);    
 
 
 var
@@ -1212,9 +1213,9 @@ begin
   Result:= False;
   anamaform := Copy(anamaform,2,Length(anamaform));
   anamaform := StringReplace(anamaform,'Browse','',[rfReplaceAll]);
-  s:= ' select * from tuser a inner join thakuser  b on a.user_kode =b.hak_user_kode '
+  s:= ' select * from tuser a inner join thakuser  b on a.user =b.hak_user_kode '
     + ' inner join tmenu c on c.men_id =b.hak_men_id '
-    + ' where a.user_kode='+ Quot(akodeuser)
+    + ' where a.user='+ Quot(akodeuser)
     + ' and c.men_nama = ' + Quot(anamaform) ;
   tsql := xOpenQuery(s, arc, frmMenu.MyConnection1);
   with tsql do
@@ -2398,6 +2399,28 @@ begin
     IdHTTP.Free;
   end;
 end;
+
+procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);
+var
+  IdHTTP: TIdHTTP;
+  MS: TMemoryStream;
+  JpegImg: TJPEGImage;
+begin
+  IdHTTP := TIdHTTP.Create(nil);
+  MS := TMemoryStream.Create;
+  JpegImg := TJPEGImage.Create;
+  try
+    IdHTTP.Get(AURL, MS);
+    MS.Position := 0;
+    JpegImg.LoadFromStream(MS);
+    AImage.Picture.Assign(JpegImg);  // cxImage juga pakai Picture.Assign
+  finally
+    JpegImg.Free;
+    MS.Free;
+    IdHTTP.Free;
+  end;
+end;
+
 
 end.
 

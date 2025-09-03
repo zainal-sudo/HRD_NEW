@@ -384,7 +384,7 @@ begin
 
   with Result do
   begin
-      EnsureConnected(frmMenu.MyConnection1);
+      EnsureConnected(aMyConn);
       // frmMenu.MyConnection1.Connected;
       Connection := aMyConn;   // default koneksi MyDAC
 

@@ -164,7 +164,8 @@ function Quot(aString : String) : String;
     TcxGridDBTableView);
 function UploadFile(const AFilePath, AURL, APrefix: string; out AFilename, AErrorMsg: string): Boolean;
 function GetJsonValue(const AJson, AKey: string): string;
-procedure LoadImageFromURL(const AURL: string; AImage: TImage);    
+procedure LoadImageFromURL(const AURL: string; AImage: TImage);
+// procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);
 
 
 var
@@ -2398,6 +2399,28 @@ begin
     IdHTTP.Free;
   end;
 end;
+
+//procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);
+//var
+//  IdHTTP: TIdHTTP;
+//  MS: TMemoryStream;
+//  JpegImg: TJPEGImage;
+//begin
+//  IdHTTP := TIdHTTP.Create(nil);
+//  MS := TMemoryStream.Create;
+//  JpegImg := TJPEGImage.Create;
+//  try
+//    IdHTTP.Get(AURL, MS);
+//    MS.Position := 0;
+//    JpegImg.LoadFromStream(MS);
+//    AImage.Picture.Assign(JpegImg);  // cxImage juga pakai Picture.Assign
+//  finally
+//    JpegImg.Free;
+//    MS.Free;
+//    IdHTTP.Free;
+//  end;
+//end;
+
 
 end.
 

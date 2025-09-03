@@ -23,12 +23,14 @@ uses
 
 type
   TfrmBrowseIjin = class(TfrmCxBrowse)
+    cxButton5: TcxButton;
   procedure btnRefreshClick(Sender: TObject);
   procedure FormShow(Sender: TObject);
   procedure cxButton2Click(Sender: TObject);
   procedure cxButton1Click(Sender: TObject);
   procedure cxButton6Click(Sender: TObject);
   procedure cxButton4Click(Sender: TObject);
+    procedure cxButton5Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -39,7 +41,7 @@ var
   frmBrowseIjin: TfrmBrowseIjin;
 
 implementation
-   uses ufrmIjin, uModuleConnection, ufrmMenu;
+   uses ufrmIjin, uModuleConnection, ufrmMenu, uFrmPreviewImage;
 {$R *.dfm}
 
 procedure TfrmBrowseIjin.btnRefreshClick(Sender: TObject);
@@ -127,12 +129,24 @@ begin
 
     EnsureConnected(frmMenu.MyConnection1);
     ExecSQLDirect(frmMenu.MyConnection1,s);
-    
+
     CDSMaster.Delete;
   except
     MessageDlg('Gagal Hapus',mtError, [mbOK],0);
     Exit;
   end;
+
+end;
+
+procedure TfrmBrowseIjin.cxButton5Click(Sender: TObject);
+begin
+  inherited;
+    Application.CreateForm(TfrmPrevImg, frmbantuan2);
+    frmBantuan2.SQLMaster := sqlbantuan;
+    frmBantuan2.ShowModal;
 end;
 
 end.
+
+
+

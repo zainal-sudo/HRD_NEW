@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, AdvPanel, ComCtrls, StdCtrls, AdvEdit,SqlExpr, Menus,
-  cxLookAndFeelPainters, cxButtons,StrUtils, cxGraphics, cxLookAndFeels,
+  cxLookAndFeelPainters, cxButtons, StrUtils, cxGraphics, cxLookAndFeels,
   dxSkinsCore, dxSkinsDefaultPainters,MyAccess, dxSkinBlack, dxSkinBlue,
   dxSkinCaramel, dxSkinCoffee, dxSkinDarkRoom, dxSkinDarkSide, dxSkinFoggy,
   dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian, dxSkinLiquidSky,
@@ -125,7 +125,7 @@ begin
   if Key = VK_F10 then
   begin
     try
-      if (cxLookupAlasan.Text = 'Sakit') AND (Image1.Hint = '') then
+      if ((cxLookupAlasan.Text = 'Sakit') OR (cxLookupAlasan.Text = 'Masuk') OR (cxLookupAlasan.Text = 'Terlambat')) AND (Image1.Hint = '') then
       begin
         MessageDlg('Lampiran foto harus di isi', mtWarning, [mbOK],0);
         Exit;
@@ -282,7 +282,7 @@ var
   foto, Msg: String;
 begin
   try
-    if (cxLookupAlasan.Text = 'Sakit') AND (Image1.Hint = '') then
+    if ((cxLookupAlasan.Text = 'Sakit') OR (cxLookupAlasan.Text = 'Masuk') OR (cxLookupAlasan.Text = 'Terlambat')) AND (Image1.Hint = '') then
     begin
       MessageDlg('Lampiran foto harus di isi', mtWarning, [mbOK],0);
       Exit;
@@ -341,7 +341,7 @@ var
   foto, Msg: String;
 begin
   try
-    if (cxLookupAlasan.Text = 'Sakit') AND (Image1.Hint = '') then
+    if ((cxLookupAlasan.Text = 'Sakit') OR (cxLookupAlasan.Text = 'Masuk') OR (cxLookupAlasan.Text = 'Terlambat')) AND (Image1.Hint = '') then
     begin
       MessageDlg('Lampiran foto harus di isi', mtWarning, [mbOK],0);
       Exit;

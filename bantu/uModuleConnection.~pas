@@ -376,7 +376,7 @@ begin
   Result := TMyQuery.Create(nil);
   RecCount := 0;
 
-  if (UpperCase(LeftStr(aSQL,6)) <> 'SELECT') or (Length(Trim(aSQL)) = 0) then
+  if (UpperCase(LeftStr(aSQL,6)) <> 'SELECT') and (Length(Trim(aSQL)) = 0) then
   begin
     FreeAndNil(Result);
     Exit;
@@ -384,45 +384,27 @@ begin
 
   with Result do
   begin
-    // pastikan connection sudah di-set
-    if aMyConn = nil then
-      Connection := frmMenu.MyConnection1
-    else
-      Connection := aMyConn;
+      EnsureConnected(frmMenu.MyConnection1);
+      // frmMenu.MyConnection1.Connected;
+      Connection := aMyConn;   // default koneksi MyDAC
 
-    EnsureConnected(Connection);
+
     SQL.Text := aSQL;
-
     try
       Open;
-    except
-      on E: Exception do
+      First;
+      while not Eof do
       begin
-        if Pos('Lost connection', E.Message) > 0 then
-        begin
-          Connection.Disconnect;
-          Sleep(200);
-          Connection.Connect;
-          Open; // coba ulang query setelah reconnect
-        end
-        else
-        begin
-          FreeAndNil(Result);
-          raise;
-        end;
+        Inc(RecCount);
+        Next;
       end;
+      First;
+    except
+      FreeAndNil(Result);
     end;
-
-    First;
-    while not Eof do
-    begin
-      Inc(RecCount);
-      Next;
-    end;
-    First;
   end;
-end;
 
+end;
 
 
 procedure TcxDBPivotHelper.ExportToXLS(ExpandAll: Boolean = True; sFileName:
@@ -698,15 +680,14 @@ begin
 
   if not AConn.Connected then
   begin
-    AConn.Connect;
-  end
-  else
-  begin
     try
-      AConn.Ping; // pastikan masih nyambung
-    except
-      AConn.Disconnect;
       AConn.Connect;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Gagal konek ke database: ' + E.Message);
+        raise;
+      end;
     end;
   end;
 end;
@@ -857,3 +838,4 @@ begin
 end;
 
 end.
+

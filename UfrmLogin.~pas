@@ -28,7 +28,7 @@ type
     procedure edtuserKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure getcabangaktif;  
+    procedure getcabangaktif(aUnit: String)
   private
     { Private declarations }
   public
@@ -85,7 +85,7 @@ end;
 
 procedure TfrmLogin.edtuserButtonClick(Sender: TObject);
 begin
-  sqlbantuan := 'SELECT kd_user User from tuser';
+  sqlbantuan := 'SELECT user User, kd_unit Kode from tuser';
   Application.CreateForm(Tfrmbantuan2, frmbantuan2);
   frmBantuan2.SQLMaster := sqlbantuan;
   frmBantuan2.ShowModal;
@@ -146,7 +146,8 @@ begin
         // frmMenu.userid :=Fields[2].AsString;
         //IEDIT := Fields[2].AsInteger;
         //         loadaksesmenu(Fields[0].AsSTRING);
-        //         frmMenu.StatusBar1.Panels[0].Text := frmMenu.NMUSER;
+        frmMenu.StatusBar1.Panels[0].Text := Fields[0].AsString;
+        getcabangaktif(Fields[1].AsString);
         self.Hide;
 
       end
@@ -259,29 +260,29 @@ begin
   end;
 end;
 
-procedure tfrmLogin.getcabangaktif;
+procedure tfrmLogin.getcabangaktif(aUnit: String);
 var
   s:string;
   tsql: TMyQuery;
   arc: Integer;
 begin
-//  s:='select cbg_kode,cbg_nama from tcabang where cbg_aktif=1';
-//  tsql:=xOpenQuery(S, arc, frmMenu.MyConnection1);
-//  with tsql do
-//  begin
-//    try
-//      if not eof then
-//      begin
+  s:='select nm_unit from tunit where kd_unit = '+Quot(aUnit);
+  tsql:=xOpenQuery(S, arc, frmMenu.MyConnection1);
+  with tsql do
+  begin
+    try
+      if not eof then
+      begin
 //        frmMenu.KDCABANG := Fields[0].AsString;
 //        frmMenu.NMCABANG := Fields[1].AsString;
 //
 //        edtCabang.Text := Fields[1].AsString;
-//        frmMenu.StatusBar1.Panels[3].Text := Fields[1].AsString;
-//      end;
-//    finally
-//      free;
-//    end;
-//  end;
+        frmMenu.StatusBar1.Panels[3].Text := Fields[0].AsString;
+      end;
+    finally
+      free;
+    end;
+  end;
 end;
 
 end.
