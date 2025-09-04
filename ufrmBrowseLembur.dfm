@@ -1,11 +1,13 @@
 inherited frmBrowseLembur: TfrmBrowseLembur
-  Left = 304
-  Top = 157
+  Left = 351
+  Top = 238
   Caption = 'Browse Lembur'
+  ClientWidth = 748
   OldCreateOrder = True
   PixelsPerInch = 96
   TextHeight = 13
   inherited AdvPanel1: TAdvPanel
+    Width = 748
     FullHeight = 0
     inherited cxButton1: TcxButton
       OnClick = cxButton1Click
@@ -22,15 +24,37 @@ inherited frmBrowseLembur: TfrmBrowseLembur
     inherited cxButton6: TcxButton
       Visible = False
     end
+    inherited cxButton8: TcxButton
+      Left = 659
+    end
+    object cxButton5: TcxButton
+      Left = 538
+      Top = 2
+      Width = 87
+      Height = 32
+      Caption = '&Preview'
+      TabOrder = 7
+      OnClick = cxButton5Click
+      Align = alLeft
+      LookAndFeel.Kind = lfStandard
+      LookAndFeel.SkinName = 'LondonLiquidSky'
+    end
   end
   inherited AdvPanel2: TAdvPanel
+    Width = 748
     FullHeight = 0
+    inherited btnRefresh: TcxButton
+      Left = 659
+    end
   end
   inherited AdvPanel3: TAdvPanel
+    Width = 748
     FullHeight = 0
     inherited cxGrid: TcxGrid
+      Width = 744
       inherited cxGrdMaster: TcxGridDBTableView
         OnDblClick = cxButton1Click
+        OptionsView.Footer = True
         Styles.OnGetContentStyle = cxGrdMasterStylesGetContentStyle
       end
     end

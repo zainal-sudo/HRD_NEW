@@ -9,7 +9,7 @@ interface
   cxDBExtLookupComboBox,cxgrid,cxGridDBTableView,cxGridFilterHelpers,cxCustomData,
   OleServer, ExcelXP,printers,WinSpool,DBGrids,cxDropDownEdit,cxCurrencyEdit,cxCalendar,
   cxGridExportLink,cxFilter,cxGridTableView,cxGridCustomTableView,MyAccess,
-  IdHTTP, IdMultipartFormData, JPEG;
+  IdHTTP, IdMultipartFormData, JPEG, PNGImage, cxImage;
 type
  Tbutton1 = class(Tbutton)
   public
@@ -165,7 +165,7 @@ function Quot(aString : String) : String;
 function UploadFile(const AFilePath, AURL, APrefix: string; out AFilename, AErrorMsg: string): Boolean;
 function GetJsonValue(const AJson, AKey: string): string;
 procedure LoadImageFromURL(const AURL: string; AImage: TImage);
-procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);    
+procedure cxLoadImageFromURL(const AURL: string; AImage: TcxImage);
 
 
 var
@@ -2413,7 +2413,7 @@ begin
     IdHTTP.Get(AURL, MS);
     MS.Position := 0;
     JpegImg.LoadFromStream(MS);
-    AImage.Picture.Assign(JpegImg);  // cxImage juga pakai Picture.Assign
+    AImage.Picture.Assign(JpegImg);
   finally
     JpegImg.Free;
     MS.Free;

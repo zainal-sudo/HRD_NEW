@@ -53,8 +53,15 @@ begin
                     + ' WHERE a.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT);
   inherited;
   cxGrdMaster.ApplyBestFit();
-//  cxGrdMaster.Columns[0].Width :=100;
-//  cxGrdMaster.Columns[1].Width :=200;
+  cxGrdMaster.Columns[0].Width :=100;
+  cxGrdMaster.Columns[1].Width :=250;
+  cxGrdMaster.Columns[3].Width :=150;
+  cxGrdMaster.Columns[4].Width :=100;
+  cxGrdMaster.Columns[5].Width :=150;
+  cxGrdMaster.Columns[6].Width :=100;
+  cxGrdMaster.Columns[7].Width :=200;
+  cxGrdMaster.Columns[8].Width :=150;
+  cxGrdMaster.Columns[9].Width :=200;
 end;
 
 procedure TfrmBrowseKaryawan.FormShow(Sender: TObject);
@@ -68,12 +75,6 @@ procedure TfrmBrowseKaryawan.cxButton2Click(Sender: TObject);
 var
   frmkaryawan: TfrmKaryawan;
 begin
-  if not cekdelete(frmMenu.KDUSER, 'frmkaryawan') then
-  begin
-    MessageDlg('Anda tidak berhak Menghapus di Modul ini', mtWarning, [mbOK],0);
-    Exit;
-  End;
-
   inherited;
   if ActiveMDIChild.Caption <> 'Master Karyawan' then
   begin

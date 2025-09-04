@@ -16,13 +16,12 @@ uses
   dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue, cxControls,
   cxContainer, cxEdit, cxTextEdit, cxMaskEdit, cxDropDownEdit,
   cxLookupEdit, cxDBLookupEdit, cxDBExtLookupComboBox, DBClient,
-  IdHTTP, IdMultipartFormData, JPEG;
+  IdHTTP, IdMultipartFormData, JPEG, AdvEdBtn, cxGroupBox;
 
 type
   TfrmIjin = class(TForm)
     AdvPanel1: TAdvPanel;
     Label2: TLabel;
-    edtNIK: TAdvEdit;
     Label3: TLabel;
     edtKeterangan: TAdvEdit;
     AdvPanel3: TAdvPanel;
@@ -41,6 +40,18 @@ type
     Image1: TImage;
     btn1: TcxButton;
     OpenDialog1: TOpenDialog;
+    edtNIK: TAdvEditBtn;
+    cxGroupBox1: TcxGroupBox;
+    lbl1: TLabel;
+    lbl2: TLabel;
+    edtAbsenMsk: TAdvEdit;
+    edtAbsenKlr: TAdvEdit;
+    lbl3: TLabel;
+    edtDepartemen: TAdvEdit;
+    lbl4: TLabel;
+    edtJabatan: TAdvEdit;
+    lbl5: TLabel;
+    edtNama: TAdvEdit;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -57,6 +68,10 @@ type
     procedure FormShow(Sender: TObject);
     procedure dtTanggalChange(Sender: TObject);
     procedure btn1Click(Sender: TObject);
+    procedure edtNIKClickBtn(Sender: TObject);
+    procedure ShowAbsensi;
+    procedure edtNIKChange(Sender: TObject);
+    procedure detailkaryawan;
   private
     FCDSAlasan: TClientDataset;
     FFLAGEDIT: Boolean;
@@ -90,12 +105,12 @@ begin
   FID:='';
   FLAGEDIT := FALSE;
   FLAGUPLOAD := FALSE;
-  edtNomor.Text := getmaxkode;
   edtNIK.clear;
-  dtTanggal.DateTime := Date;
+  dtTanggal.Date := Date;
   cxLookupAlasan.ItemIndex := 0;
   edtKeterangan.Clear;
   Image1.Picture := nil;
+  edtNomor.Text := getmaxkode;
   edtNIK.SetFocus;
 end;
 
@@ -106,7 +121,7 @@ var
 begin
   if (Key = VK_F1) AND (Sender = edtNIK) then
   begin
-    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan';
+    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_status_aktif = 1 AND kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
     Application.CreateForm(Tfrmbantuan2, frmbantuan2);
     frmBantuan2.SQLMaster := sqlbantuan;
     frmBantuan2.ShowModal;
@@ -114,6 +129,7 @@ begin
     if keyfield <> '' then
     begin
       edtNIK.Text := keyfield;
+      edtNama.Text := displayfield;
     end;
   end;
 
@@ -197,6 +213,8 @@ begin
         Image1.Hint := fieldbyname('ij_foto').AsString;
         FID := fieldbyname('ij_nomor').Asstring;
 
+        detailkaryawan;
+        ShowAbsensi;
         if (Image1.Hint <> '') then
         begin
           LoadImageFromURL(frmMenu.aurl + '/bukti/' + Image1.Hint, Image1);
@@ -448,6 +466,10 @@ end;
 procedure TfrmIjin.dtTanggalChange(Sender: TObject);
 begin
   edtNomor.Text := getmaxkode;
+
+  if (edtNIK.Text = '') OR (dtTanggal.Date = 0) then Exit;
+
+  ShowAbsensi;  
 end;
 
 procedure TfrmIjin.btn1Click(Sender: TObject);
@@ -486,5 +508,81 @@ end;
 //    HTTP.Free;
 //  end;
 //end;
+
+procedure TfrmIjin.edtNIKClickBtn(Sender: TObject);
+begin
+  sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_status_aktif = 1 AND kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
+  Application.CreateForm(Tfrmbantuan2, frmbantuan2);
+  frmBantuan2.SQLMaster := sqlbantuan;
+  frmBantuan2.ShowModal;
+
+  if keyfield <> '' then
+  begin
+    edtNIK.Text := keyfield;
+    edtNama.Text := displayfield;
+    detailkaryawan;
+  end;
+end;
+
+procedure TfrmIjin.ShowAbsensi;
+var
+  s: string;
+  tsql: TmyQuery;
+  arc: Integer;
+begin
+  s:= 'select MIN(CASE WHEN status_absen = 1 THEN TIME(tanggal) END) AS Jam_in, '
+      + ' MAX(CASE WHEN status_absen in (1,2) THEN TIME(tanggal) END) AS Jam_out '
+      + ' from tabsensitampung where kar_nik = ' + Quot(edtNIK.Text)
+      + ' AND date(tanggal) = ' + QuotD(dtTanggal.Date);
+  EnsureConnected(frmMenu.MyConnection1);
+  tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
+  with tsql do
+  begin
+    try
+      if not Eof then
+      begin
+        edtAbsenMsk.Text := FormatDateTime('HH:nn:ss', FieldByName('Jam_in').AsDateTime);
+        edtAbsenKlr.Text := FormatDateTime('HH:nn:ss', FieldByName('Jam_out').AsDateTime);
+      end;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+procedure TfrmIjin.edtNIKChange(Sender: TObject);
+begin
+  if (edtNIK.Text = '') OR (dtTanggal.Date = 0) then Exit;
+
+  ShowAbsensi;
+end;
+
+procedure TfrmIjin.detailkaryawan;
+var
+  s: string;
+  tsql: TmyQuery;
+  arc: Integer;
+begin
+  s:= 'SELECT a.kar_nama, b.nm_dept, c.nm_jabat '
+      + ' FROM karyawan a '
+      + ' INNER JOIN tdept b ON a.kar_dep_kode = b.kd_dept '
+      + ' INNER JOIN tjabatan c ON a.kar_jab_kode = c.kd_jabat '
+      + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
+  EnsureConnected(frmMenu.MyConnection1);
+  tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
+  with tsql do
+  begin
+    try
+      if not Eof then
+      begin
+        edtNama.Text := FieldByName('kar_nama').AsString;
+        edtDepartemen.Text := FieldByName('nm_dept').AsString;
+        edtJabatan.Text := FieldByName('nm_jabat').AsString;
+      end;
+    finally
+      Free;
+    end;
+  end;
+end;
 
 end.

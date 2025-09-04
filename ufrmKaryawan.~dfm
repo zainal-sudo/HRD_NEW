@@ -188,7 +188,7 @@ object frmKaryawan: TfrmKaryawan
     object edtNIK: TAdvEdit
       Left = 119
       Top = 12
-      Width = 74
+      Width = 170
       Height = 21
       AutoFocus = False
       EditAlign = eaLeft
@@ -874,7 +874,7 @@ object frmKaryawan: TfrmKaryawan
       Height = 21
       Date = 45898.469109386580000000
       Time = 45898.469109386580000000
-      TabOrder = 12
+      TabOrder = 14
     end
     object dtLahir: TDateTimePicker
       Left = 119
@@ -883,7 +883,7 @@ object frmKaryawan: TfrmKaryawan
       Height = 21
       Date = 45898.469109386580000000
       Time = 45898.469109386580000000
-      TabOrder = 13
+      TabOrder = 15
     end
     object edtTmptLahir: TAdvEdit
       Left = 119
@@ -940,7 +940,7 @@ object frmKaryawan: TfrmKaryawan
       OleDropTarget = False
       OleDropSource = False
       Signed = False
-      TabOrder = 14
+      TabOrder = 16
       Transparent = False
       Visible = True
       OnKeyDown = FormKeyDown
@@ -956,7 +956,7 @@ object frmKaryawan: TfrmKaryawan
       StyleDisabled.LookAndFeel.Kind = lfFlat
       StyleFocused.LookAndFeel.Kind = lfFlat
       StyleHot.LookAndFeel.Kind = lfFlat
-      TabOrder = 15
+      TabOrder = 12
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
       Width = 170
@@ -971,7 +971,7 @@ object frmKaryawan: TfrmKaryawan
       StyleDisabled.LookAndFeel.Kind = lfFlat
       StyleFocused.LookAndFeel.Kind = lfFlat
       StyleHot.LookAndFeel.Kind = lfFlat
-      TabOrder = 16
+      TabOrder = 13
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
       Width = 170

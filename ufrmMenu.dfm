@@ -1,6 +1,6 @@
 object frmMenu: TfrmMenu
-  Left = 112
-  Top = 243
+  Left = 158
+  Top = 175
   Width = 1337
   Height = 826
   Caption = 'HRD New'

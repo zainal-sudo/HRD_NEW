@@ -53,8 +53,15 @@ begin
                     + ' WHERE a.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT);
   inherited;
   cxGrdMaster.ApplyBestFit();
-//  cxGrdMaster.Columns[0].Width :=100;
-//  cxGrdMaster.Columns[1].Width :=200;
+  cxGrdMaster.Columns[0].Width :=130;
+  cxGrdMaster.Columns[1].Width :=250;
+  cxGrdMaster.Columns[3].Width :=150;
+  cxGrdMaster.Columns[4].Width :=100;
+  cxGrdMaster.Columns[5].Width :=150;
+  cxGrdMaster.Columns[6].Width :=100;
+  cxGrdMaster.Columns[7].Width :=200;
+  cxGrdMaster.Columns[8].Width :=150;
+  cxGrdMaster.Columns[9].Width :=200;
 end;
 
 procedure TfrmBrowseKaryawan.FormShow(Sender: TObject);

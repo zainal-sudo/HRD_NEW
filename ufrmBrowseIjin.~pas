@@ -47,7 +47,7 @@ implementation
 procedure TfrmBrowseIjin.btnRefreshClick(Sender: TObject);
 begin
   Self.SQLMaster := 'SELECT a.ij_nomor Nomor, a.kar_nik NIK, b.kar_nama Nama, c.nm_jabat Jabatan, d.nm_dept Departmen, e.nm_unit Unit, '
-                    + ' tanggal Tanggal, alasan Alasan, keterangan Keterangan '
+                    + ' tanggal Tanggal, alasan Alasan, keterangan Keterangan, a.ij_foto foto '
                     + ' FROM tijin a '
                     + ' INNER JOIN tkaryawan b ON a.kar_nik = b.kar_nik '
                     + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
@@ -57,8 +57,16 @@ begin
                     + ' AND a.tanggal between ' + QuotD(startdate.DateTime) + ' and ' + QuotD(enddate.DateTime);
   inherited;
   cxGrdMaster.ApplyBestFit();
-//  cxGrdMaster.Columns[0].Width :=100;
-//  cxGrdMaster.Columns[1].Width :=200;
+  cxGrdMaster.Columns[0].Width :=100;
+  cxGrdMaster.Columns[1].Width :=150;
+  cxGrdMaster.Columns[2].Width :=200;
+  cxGrdMaster.Columns[3].Width :=200;
+  cxGrdMaster.Columns[4].Width :=100;
+  cxGrdMaster.Columns[5].Width :=200;
+  cxGrdMaster.Columns[6].Width :=100;
+  cxGrdMaster.Columns[7].Width :=100;
+  cxGrdMaster.Columns[8].Width :=150;
+  cxGrdMaster.Columns[9].Visible := False;
 end;
 
 procedure TfrmBrowseIjin.FormShow(Sender: TObject);
@@ -141,9 +149,11 @@ end;
 procedure TfrmBrowseIjin.cxButton5Click(Sender: TObject);
 begin
   inherited;
-    Application.CreateForm(TfrmPrevImg, frmbantuan2);
-    frmBantuan2.SQLMaster := sqlbantuan;
-    frmBantuan2.ShowModal;
+  If (CDSMaster.FieldByname('foto').IsNull) OR (CDSMaster.FieldByname('foto').AsString = '') then exit;
+  
+  Application.CreateForm(TfrmPrevImg, frmprevimg);
+  frmprevimg.foto := CDSMaster.FieldByname('foto').AsString;
+  frmprevimg.ShowModal;
 end;
 
 end.

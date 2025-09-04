@@ -1,8 +1,8 @@
 object frmLembur: TfrmLembur
-  Left = 589
-  Top = 274
-  Width = 508
-  Height = 401
+  Left = 299
+  Top = 168
+  Width = 748
+  Height = 575
   Caption = 'Lembur'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,8 +23,8 @@ object frmLembur: TfrmLembur
   object AdvPanel1: TAdvPanel
     Left = 0
     Top = 41
-    Width = 492
-    Height = 286
+    Width = 732
+    Height = 460
     Align = alClient
     BevelInner = bvRaised
     Color = clWhite
@@ -96,14 +96,14 @@ object frmLembur: TfrmLembur
     end
     object Label3: TLabel
       Left = 18
-      Top = 61
+      Top = 134
       Width = 38
       Height = 13
       Caption = 'Tanggal'
     end
     object Label4: TLabel
       Left = 18
-      Top = 109
+      Top = 206
       Width = 56
       Height = 13
       Caption = 'Keterangan'
@@ -117,28 +117,28 @@ object frmLembur: TfrmLembur
     end
     object Label1: TLabel
       Left = 18
-      Top = 84
+      Top = 157
       Width = 46
       Height = 13
       Caption = 'Jam Mulai'
     end
     object lbl1: TLabel
       Left = 234
-      Top = 84
+      Top = 157
       Width = 46
       Height = 13
       Caption = 'Jam Akhir'
     end
     object lbl2: TLabel
       Left = 18
-      Top = 136
+      Top = 232
       Width = 68
       Height = 13
       Caption = 'Lampiran Foto'
     end
     object Image1: TImage
       Left = 176
-      Top = 137
+      Top = 233
       Width = 121
       Height = 120
       Center = True
@@ -147,71 +147,38 @@ object frmLembur: TfrmLembur
       ShowHint = False
       Stretch = True
     end
-    object edtNIK: TAdvEdit
-      Left = 103
-      Top = 36
-      Width = 122
-      Height = 21
-      AutoFocus = False
-      EditAlign = eaLeft
-      EditType = etString
-      ErrorMarkerPos = 0
-      ErrorMarkerLen = 0
-      ErrorColor = clRed
-      ErrorFontColor = clWhite
-      ExcelStyleDecimalSeparator = False
-      Flat = False
-      FlatLineColor = clBlack
-      FlatParentColor = True
-      FocusAlign = eaDefault
-      FocusBorder = False
-      FocusColor = clWhite
-      FocusFontColor = clWindowText
-      FocusLabel = False
-      FocusWidthInc = 0
-      ModifiedColor = clHighlight
-      DisabledColor = clSilver
-      URLColor = clBlue
-      ReturnIsTab = False
-      LengthLimit = 0
-      TabOnFullLength = False
-      Precision = 0
-      LabelPosition = lpLeftTop
-      LabelMargin = 4
-      LabelTransparent = False
-      LabelAlwaysEnabled = False
-      LabelFont.Charset = DEFAULT_CHARSET
-      LabelFont.Color = clWindowText
-      LabelFont.Height = -11
-      LabelFont.Name = 'Tahoma'
-      LabelFont.Style = []
-      Lookup.CaseSensitive = False
-      Lookup.Color = clWindow
-      Lookup.DisplayCount = 4
-      Lookup.Enabled = False
-      Lookup.History = False
-      Lookup.NumChars = 2
-      Lookup.Multi = False
-      Lookup.Separator = ';'
-      Persistence.Enable = False
-      Persistence.Location = plInifile
-      Color = clWhite
-      Enabled = True
-      HintShowLargeText = False
-      MaxLength = 5
-      OleDropTarget = False
-      OleDropSource = False
-      Signed = False
-      TabOrder = 1
-      Transparent = False
-      Visible = True
-      OnKeyDown = FormKeyDown
-      OnKeyPress = FormKeyPress
+    object Label6: TLabel
+      Left = 18
+      Top = 181
+      Width = 20
+      Height = 13
+      Caption = 'Poin'
+    end
+    object Label9: TLabel
+      Left = 16
+      Top = 62
+      Width = 27
+      Height = 13
+      Caption = 'Nama'
+    end
+    object lbl3: TLabel
+      Left = 16
+      Top = 85
+      Width = 59
+      Height = 12
+      Caption = 'Departemen'
+    end
+    object lbl4: TLabel
+      Left = 16
+      Top = 109
+      Width = 39
+      Height = 13
+      Caption = 'Jabatan'
     end
     object edtKeterangan: TAdvEdit
       Left = 103
-      Top = 109
-      Width = 345
+      Top = 206
+      Width = 306
       Height = 21
       AutoFocus = False
       EditAlign = eaLeft
@@ -271,7 +238,7 @@ object frmLembur: TfrmLembur
     end
     object dtTanggal: TDateTimePicker
       Left = 103
-      Top = 60
+      Top = 133
       Width = 122
       Height = 21
       Date = 45899.369493425930000000
@@ -343,7 +310,7 @@ object frmLembur: TfrmLembur
     end
     object dtJamMulai: TDateTimePicker
       Left = 103
-      Top = 84
+      Top = 157
       Width = 122
       Height = 21
       Date = 45899.369493425930000000
@@ -351,11 +318,10 @@ object frmLembur: TfrmLembur
       Time = 45899.369493425930000000
       Kind = dtkTime
       TabOrder = 3
-      OnChange = dtTanggalChange
     end
     object dtJamAkhir: TDateTimePicker
       Left = 287
-      Top = 84
+      Top = 157
       Width = 122
       Height = 21
       Date = 45899.369493425930000000
@@ -363,11 +329,11 @@ object frmLembur: TfrmLembur
       Time = 45899.369493425930000000
       Kind = dtkTime
       TabOrder = 4
-      OnChange = dtTanggalChange
+      OnExit = dtJamAkhirExit
     end
     object btn1: TcxButton
-      Left = 104
-      Top = 136
+      Left = 103
+      Top = 231
       Width = 65
       Height = 25
       Caption = 'Upload'
@@ -376,11 +342,470 @@ object frmLembur: TfrmLembur
       LookAndFeel.Kind = lfUltraFlat
       LookAndFeel.SkinName = 'LondonLiquidSky'
     end
+    object edtPoin: TAdvEdit
+      Left = 103
+      Top = 181
+      Width = 122
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWhite
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'Tahoma'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWhite
+      Enabled = True
+      HintShowLargeText = False
+      MaxLength = 5
+      OleDropTarget = False
+      OleDropSource = False
+      ReadOnly = True
+      Signed = False
+      TabOrder = 7
+      Text = '0'
+      Transparent = False
+      Visible = True
+      OnKeyDown = FormKeyDown
+      OnKeyPress = FormKeyPress
+    end
+    object edtNIK: TAdvEditBtn
+      Left = 103
+      Top = 36
+      Width = 122
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWindow
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'MS Sans Serif'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWindow
+      Enabled = True
+      HintShowLargeText = False
+      OleDropTarget = False
+      OleDropSource = False
+      Signed = False
+      TabOrder = 1
+      Transparent = False
+      Visible = True
+      OnChange = edtNIKChange
+      ButtonWidth = 16
+      Etched = False
+      OnClickBtn = edtNIKClickBtn
+    end
+    object cxGroupBox1: TcxGroupBox
+      Left = 448
+      Top = 16
+      Caption = 'Ket. Absensi'
+      ParentFont = False
+      Style.BorderStyle = ebsFlat
+      Style.Font.Charset = DEFAULT_CHARSET
+      Style.Font.Color = clWindowText
+      Style.Font.Height = -11
+      Style.Font.Name = 'Tahoma'
+      Style.Font.Style = []
+      Style.IsFontAssigned = True
+      TabOrder = 8
+      Height = 89
+      Width = 209
+      object Label7: TLabel
+        Left = 8
+        Top = 24
+        Width = 52
+        Height = 13
+        Caption = 'Jam Masuk'
+      end
+      object Label8: TLabel
+        Left = 8
+        Top = 56
+        Width = 52
+        Height = 13
+        Caption = 'Jam Keluar'
+      end
+      object edtAbsenMsk: TAdvEdit
+        Left = 72
+        Top = 24
+        Width = 121
+        Height = 21
+        AutoFocus = False
+        EditAlign = eaLeft
+        EditType = etString
+        ErrorMarkerPos = 0
+        ErrorMarkerLen = 0
+        ErrorColor = clRed
+        ErrorFontColor = clWhite
+        ExcelStyleDecimalSeparator = False
+        Flat = False
+        FlatLineColor = clBlack
+        FlatParentColor = True
+        FocusAlign = eaDefault
+        FocusBorder = False
+        FocusColor = clWindow
+        FocusFontColor = clWindowText
+        FocusLabel = False
+        FocusWidthInc = 0
+        ModifiedColor = clHighlight
+        DisabledColor = clSilver
+        URLColor = clBlue
+        ReturnIsTab = False
+        LengthLimit = 0
+        TabOnFullLength = False
+        Precision = 0
+        LabelPosition = lpLeftTop
+        LabelMargin = 4
+        LabelTransparent = False
+        LabelAlwaysEnabled = False
+        LabelFont.Charset = DEFAULT_CHARSET
+        LabelFont.Color = clWindowText
+        LabelFont.Height = -11
+        LabelFont.Name = 'MS Sans Serif'
+        LabelFont.Style = []
+        Lookup.CaseSensitive = False
+        Lookup.Color = clWindow
+        Lookup.DisplayCount = 4
+        Lookup.Enabled = False
+        Lookup.History = False
+        Lookup.NumChars = 2
+        Lookup.Multi = False
+        Lookup.Separator = ';'
+        Persistence.Enable = False
+        Persistence.Location = plInifile
+        Color = clWindow
+        Enabled = True
+        HintShowLargeText = False
+        OleDropTarget = False
+        OleDropSource = False
+        ReadOnly = True
+        Signed = False
+        TabOrder = 0
+        Transparent = False
+        Visible = True
+      end
+      object edtAbsenKlr: TAdvEdit
+        Left = 72
+        Top = 56
+        Width = 121
+        Height = 21
+        AutoFocus = False
+        EditAlign = eaLeft
+        EditType = etString
+        ErrorMarkerPos = 0
+        ErrorMarkerLen = 0
+        ErrorColor = clRed
+        ErrorFontColor = clWhite
+        ExcelStyleDecimalSeparator = False
+        Flat = False
+        FlatLineColor = clBlack
+        FlatParentColor = True
+        FocusAlign = eaDefault
+        FocusBorder = False
+        FocusColor = clWindow
+        FocusFontColor = clWindowText
+        FocusLabel = False
+        FocusWidthInc = 0
+        ModifiedColor = clHighlight
+        DisabledColor = clSilver
+        URLColor = clBlue
+        ReturnIsTab = False
+        LengthLimit = 0
+        TabOnFullLength = False
+        Precision = 0
+        LabelPosition = lpLeftTop
+        LabelMargin = 4
+        LabelTransparent = False
+        LabelAlwaysEnabled = False
+        LabelFont.Charset = DEFAULT_CHARSET
+        LabelFont.Color = clWindowText
+        LabelFont.Height = -11
+        LabelFont.Name = 'MS Sans Serif'
+        LabelFont.Style = []
+        Lookup.CaseSensitive = False
+        Lookup.Color = clWindow
+        Lookup.DisplayCount = 4
+        Lookup.Enabled = False
+        Lookup.History = False
+        Lookup.NumChars = 2
+        Lookup.Multi = False
+        Lookup.Separator = ';'
+        Persistence.Enable = False
+        Persistence.Location = plInifile
+        Color = clWindow
+        Enabled = True
+        HintShowLargeText = False
+        OleDropTarget = False
+        OleDropSource = False
+        ReadOnly = True
+        Signed = False
+        TabOrder = 1
+        Transparent = False
+        Visible = True
+      end
+    end
+    object edtNama: TAdvEdit
+      Left = 103
+      Top = 61
+      Width = 306
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWindow
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'Tahoma'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWhite
+      Enabled = True
+      HintShowLargeText = False
+      MaxLength = 30
+      OleDropTarget = False
+      OleDropSource = False
+      ReadOnly = True
+      Signed = False
+      TabOrder = 9
+      Transparent = False
+      Visible = True
+      OnKeyDown = FormKeyDown
+      OnKeyPress = FormKeyPress
+    end
+    object edtDepartemen: TAdvEdit
+      Left = 103
+      Top = 85
+      Width = 306
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWindow
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'Tahoma'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWhite
+      Enabled = True
+      HintShowLargeText = False
+      MaxLength = 30
+      OleDropTarget = False
+      OleDropSource = False
+      ReadOnly = True
+      Signed = False
+      TabOrder = 10
+      Transparent = False
+      Visible = True
+      OnKeyDown = FormKeyDown
+      OnKeyPress = FormKeyPress
+    end
+    object edtJabatan: TAdvEdit
+      Left = 103
+      Top = 109
+      Width = 306
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWindow
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'Tahoma'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWhite
+      Enabled = True
+      HintShowLargeText = False
+      MaxLength = 30
+      OleDropTarget = False
+      OleDropSource = False
+      ReadOnly = True
+      Signed = False
+      TabOrder = 11
+      Transparent = False
+      Visible = True
+      OnKeyDown = FormKeyDown
+      OnKeyPress = FormKeyPress
+    end
   end
   object AdvPanel3: TAdvPanel
     Left = 0
-    Top = 327
-    Width = 492
+    Top = 501
+    Width = 732
     Height = 35
     Align = alBottom
     BevelInner = bvRaised
@@ -445,7 +870,7 @@ object frmLembur: TfrmLembur
     URLColor = clBlue
     FullHeight = 0
     object cxButton8: TcxButton
-      Left = 403
+      Left = 643
       Top = 2
       Width = 87
       Height = 31
@@ -589,7 +1014,7 @@ object frmLembur: TfrmLembur
   object AdvPanel2: TAdvPanel
     Left = 0
     Top = 0
-    Width = 492
+    Width = 732
     Height = 41
     Align = alTop
     BevelInner = bvRaised
@@ -668,7 +1093,7 @@ object frmLembur: TfrmLembur
     end
   end
   object OpenDialog1: TOpenDialog
-    Left = 932
-    Top = 513
+    Left = 924
+    Top = 73
   end
 end

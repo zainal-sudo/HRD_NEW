@@ -19,12 +19,13 @@ uses
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
   cxButtons, ExtCtrls, AdvPanel, DBClient, cxLookAndFeels,
   dxSkinsDefaultPainters, dxSkinDarkRoom, dxSkinFoggy, dxSkinSeven,
-  dxSkinSharp, DateUtils;
+  dxSkinSharp, DateUtils, cxCurrencyEdit;
 
 type
   TfrmBrowseLembur = class(TfrmCxBrowse)
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
+    cxButton5: TcxButton;
   procedure btnRefreshClick(Sender: TObject);
   procedure FormShow(Sender: TObject);
   procedure cxButton2Click(Sender: TObject);
@@ -34,6 +35,7 @@ type
   procedure cxGrdMasterStylesGetContentStyle(
       Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
       AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
+    procedure cxButton5Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,14 +46,14 @@ var
   frmBrowseLembur: TfrmBrowseLembur;
 
 implementation
-   uses ufrmLembur, uModuleConnection, ufrmMenu, Ulib;
+   uses ufrmLembur, uModuleConnection, ufrmMenu, Ulib, uFrmPreviewImage;
 {$R *.dfm}
 
 procedure TfrmBrowseLembur.btnRefreshClick(Sender: TObject);
 begin
   Self.SQLMaster := 'SELECT a.lem_nomor Nomor, a.lem_kar_nik NIK, b.kar_nama Nama, c.nm_jabat Jabatan, d.nm_dept Departmen, e.nm_unit Unit, '
                     + ' a.lem_tanggal Tanggal, a.lem_jammulai JamMulai, a.lem_jamakhir JamAkhir, lem_keterangan Keterangan '
-                    + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out '
+                    + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out, a.lem_poin Poin, a.lem_foto foto '
                     + ' FROM tlembur a '
                     + ' INNER JOIN tkaryawan b ON a.lem_kar_nik = b.kar_nik '
                     + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
@@ -64,8 +66,21 @@ begin
                     + ' a.lem_tanggal, a.lem_jammulai, a.lem_jamakhir, a.lem_keterangan';
   inherited;
   cxGrdMaster.ApplyBestFit();
-//  cxGrdMaster.Columns[0].Width :=100;
-//  cxGrdMaster.Columns[1].Width :=200;
+  cxGrdMaster.Columns[0].Width :=100;
+  cxGrdMaster.Columns[1].Width :=150;
+  cxGrdMaster.Columns[2].Width :=200;
+  cxGrdMaster.Columns[3].Width :=100;
+  cxGrdMaster.Columns[4].Width :=100;
+  cxGrdMaster.Columns[5].Width :=200;
+  cxGrdMaster.Columns[6].Width :=100;
+  cxGrdMaster.Columns[7].Width :=100;
+  cxGrdMaster.Columns[8].Width :=100;
+  cxGrdMaster.Columns[9].Width :=100;
+  cxGrdMaster.Columns[10].Width :=100;
+  cxGrdMaster.Columns[11].Width :=100;
+  cxGrdMaster.Columns[11].Summary.FooterKind:=skSum;
+  cxGrdMaster.Columns[12].Visible := False;
+
 end;
 
 procedure TfrmBrowseLembur.FormShow(Sender: TObject);
@@ -196,6 +211,16 @@ begin
   // bandingkan full datetime
   if JamOutFull < JamAkhirFull then
     AStyle := cxStyle1;
+end;
+
+procedure TfrmBrowseLembur.cxButton5Click(Sender: TObject);
+begin
+  inherited;
+  If (CDSMaster.FieldByname('foto').IsNull) OR (CDSMaster.FieldByname('foto').AsString = '') then exit;
+  
+  Application.CreateForm(TfrmPrevImg, frmprevimg);
+  frmprevimg.foto := CDSMaster.FieldByname('foto').AsString;
+  frmprevimg.ShowModal;
 end;
 
 end.

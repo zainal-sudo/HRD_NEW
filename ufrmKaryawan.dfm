@@ -188,7 +188,7 @@ object frmKaryawan: TfrmKaryawan
     object edtNIK: TAdvEdit
       Left = 119
       Top = 12
-      Width = 74
+      Width = 170
       Height = 21
       AutoFocus = False
       EditAlign = eaLeft
@@ -236,7 +236,6 @@ object frmKaryawan: TfrmKaryawan
       Color = clWhite
       Enabled = True
       HintShowLargeText = False
-      MaxLength = 5
       OleDropTarget = False
       OleDropSource = False
       Signed = False
