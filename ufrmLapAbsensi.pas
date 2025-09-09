@@ -27,9 +27,13 @@ type
     ransaksiIjin1: TMenuItem;
     EditAbsensi1: TMenuItem;
     CheckBox1: TCheckBox;
+    cxButton5: TcxButton;
+    cxButton9: TcxButton;
   procedure btnRefreshClick(Sender: TObject);
   procedure FormShow(Sender: TObject);
   procedure cxButton6Click(Sender: TObject);
+    procedure cxButton5Click(Sender: TObject);
+    procedure cxButton9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,7 +44,7 @@ var
   frmLapAbsensi: TfrmLapAbsensi;
 
 implementation
-   uses  ufrmMenu, uModuleConnection;
+   uses ufrmMenu, uModuleConnection, uLib;
 {$R *.dfm}
 
 procedure TfrmLapAbsensi.btnRefreshClick(Sender: TObject);
@@ -67,7 +71,7 @@ begin
 + ' LEFT JOIN tabsensitampung e'
 + '     ON DATE(e.tanggal) = d.dt'
 + '     AND e.kar_nik = emp.kar_nik'
-+ ' LEFT JOIN tkaryawan x ON x.kar_Nik=emp.kar_nik    AND kar_pengecualian=0'
++ ' LEFT JOIN tkaryawan x ON x.kar_Nik=emp.kar_nik AND kar_pengecualian=0'
 + ' LEFT JOIN tjabatan y ON x.kar_kd_jabat=y.kd_jabat '
 + ' LEFT JOIN tunit z ON z.kd_unit=x.kar_kd_unit '
 + ' where kar_status_aktif=1 AND x.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT)
@@ -80,7 +84,7 @@ begin
     cxGrdMaster.Columns[1].Width :=200;
 //    CDSMaster.FieldByName('Keterangan').Size := 200;
     CDSMaster.First;
-    
+
 
 end;
 
@@ -95,6 +99,86 @@ procedure TfrmLapAbsensi.cxButton6Click(Sender: TObject);
 begin
   inherited;
   refreshdata;
+end;
+
+procedure TfrmLapAbsensi.cxButton5Click(Sender: TObject);
+var
+  s: string;
+begin
+  if ( not cekinsert(frmMenu.KDUSER,self.name)) then
+  begin
+    MessageDlg('Anda tidak berhak Insert di Modul ini',mtWarning, [mbOK],0);;
+    Exit;
+  End;
+  
+  inherited;
+
+  Screen.Cursor := crSQLWait;
+  cxButton5.Enabled := False;
+  try
+    EnsureConnected(frmMenu.MyConnection1);
+
+    s := ' DELETE h ' +
+         ' FROM tabsensitampung h ' +
+         ' INNER JOIN tkaryawan k ON h.kar_nik = k.kar_nik ' +
+         ' WHERE k.kar_kd_unit = 19 ' +
+         ' AND DATE(h.tanggal) BETWEEN ' + QuotD(startdate.Date) +
+         ' AND ' + QuotD(enddate.Date) + '; ' +
+         ' INSERT INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
+         ' SELECT b.kar_nik, a.tanggal, a.status_absen ' +
+         ' FROM hrd_roti.tabsensitampung a ' +
+         ' INNER JOIN hrd_roti.tkaryawan b ON b.id_kar = a.id_kar ' +
+         ' WHERE DATE(a.tanggal) BETWEEN ' + QuotD(startdate.Date) +
+         ' AND ' + QuotD(enddate.Date) + ';';
+
+    ExecSQLDirect(frmMenu.MyConnection1, s);
+    Application.ProcessMessages;
+
+    MessageDlg('Proses selesai!', mtInformation, [mbOK], 0);
+  finally
+    Screen.Cursor := crDefault;
+    cxButton5.Enabled := True;
+  end;
+end;
+
+procedure TfrmLapAbsensi.cxButton9Click(Sender: TObject);
+var
+  s: string;
+begin
+  if ( not cekinsert(frmMenu.KDUSER,self.name)) then
+  begin
+    MessageDlg('Anda tidak berhak Insert di Modul ini',mtWarning, [mbOK],0);;
+    Exit;
+  End;
+  
+  inherited;
+
+  Screen.Cursor := crSQLWait;
+  cxButton9.Enabled := False;
+  try
+    EnsureConnected(frmMenu.MyConnection1);
+
+    s := ' DELETE h ' +
+         ' FROM tabsensitampung h ' +
+         ' INNER JOIN tkaryawan k ON h.kar_nik = k.kar_nik ' +
+         ' WHERE k.kar_kd_unit = 20 ' +
+         ' AND DATE(h.tanggal) BETWEEN ' + QuotD(startdate.Date) +
+         ' AND ' + QuotD(enddate.Date) + '; ' +
+         ' INSERT INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
+         ' SELECT b.kar_nik, a.tanggal, a.status_absen ' +
+         ' FROM hrd_entri.tabsensitampung a ' +
+         ' INNER JOIN hrd_entri.tkaryawan b ON b.id_kar = a.id_kar ' +
+         ' WHERE DATE(a.tanggal) BETWEEN ' + QuotD(startdate.Date) +
+         ' AND ' + QuotD(enddate.Date) + ';';
+
+    ExecSQLDirect(frmMenu.MyConnection1, s);
+    Application.ProcessMessages;
+
+    MessageDlg('Proses selesai!', mtInformation, [mbOK], 0);
+  finally
+    Screen.Cursor := crDefault;
+    cxButton9.Enabled := True;
+  end;
 end;
 
 end.

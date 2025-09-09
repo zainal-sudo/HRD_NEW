@@ -1,6 +1,6 @@
 object frmMenu: TfrmMenu
-  Left = 158
-  Top = 175
+  Left = 79
+  Top = 217
   Width = 1337
   Height = 826
   Caption = 'HRD New'
@@ -154,7 +154,7 @@ object frmMenu: TfrmMenu
         Width = 200
       end
       item
-        Width = 50
+        Width = 150
       end>
   end
   object MyConnection1: TMyConnection

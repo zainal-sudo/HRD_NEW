@@ -14,7 +14,7 @@ uses
   dxSkinStardust, dxSkinSummer2008, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinXmas2008Blue, dxSkinsdxNavBar2Painter,
   dxNavBarCollns, cxClasses, dxNavBarBase, ImgList, cxControls, dxNavBar,
-  dxDockPanel, ComCtrls;
+  dxDockPanel, ComCtrls, cxContainer, cxEdit, cxProgressBar;
 
 type
   TfrmMenu = class(TForm)

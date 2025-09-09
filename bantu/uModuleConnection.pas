@@ -675,19 +675,46 @@ begin
 end;
 
 procedure EnsureConnected(AConn: TMyConnection);
+var
+  Retry: Integer;
 begin
   if (AConn = nil) then Exit;
 
   if not AConn.Connected then
   begin
-    try
-      AConn.Connect;
-    except
-      on E: Exception do
-      begin
-        ShowMessage('Gagal konek ke database: ' + E.Message);
-        raise;
+    Retry := 0;
+    while Retry < 3 do
+    begin
+      try
+        AConn.Connect;
+        Exit;
+      except
+        Inc(Retry);
+        Sleep(1000);
       end;
+    end;
+    raise Exception.Create('Gagal konek ke database setelah retry');
+  end
+  else
+  begin
+    try
+      AConn.Ping;
+    except
+      if AConn.Connected then
+        AConn.Disconnect;
+
+      Retry := 0;
+      while Retry < 3 do
+      begin
+        try
+          Sleep(1000);
+          AConn.Connect;
+          Exit;
+        except
+          Inc(Retry);
+        end;
+      end;
+      raise Exception.Create('Koneksi database terputus dan gagal reconnect');
     end;
   end;
 end;
