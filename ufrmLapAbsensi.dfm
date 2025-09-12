@@ -27,6 +27,18 @@ inherited frmLapAbsensi: TfrmLapAbsensi
     inherited cxButton8: TcxButton
       Left = 816
     end
+    object cxButton10: TcxButton
+      Left = 538
+      Top = 2
+      Width = 87
+      Height = 32
+      Caption = '&Preview'
+      TabOrder = 7
+      OnClick = cxButton10Click
+      Align = alLeft
+      LookAndFeel.Kind = lfStandard
+      LookAndFeel.SkinName = 'LondonLiquidSky'
+    end
   end
   inherited AdvPanel2: TAdvPanel
     Width = 905

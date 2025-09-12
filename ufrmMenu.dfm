@@ -1,6 +1,6 @@
 object frmMenu: TfrmMenu
-  Left = 79
-  Top = 217
+  Left = 156
+  Top = 173
   Width = 1337
   Height = 826
   Caption = 'HRD New'
@@ -101,6 +101,9 @@ object frmMenu: TfrmMenu
           Links = <
             item
               Item = dxAbsensi
+            end
+            item
+              Item = dxRekapAbsensi
             end>
         end
         object dxKaryawan: TdxNavBarItem
@@ -131,6 +134,10 @@ object frmMenu: TfrmMenu
         object dxAbsensi: TdxNavBarItem
           Caption = 'Absensi'
           OnClick = dxAbsensiClick
+        end
+        object dxRekapAbsensi: TdxNavBarItem
+          Caption = 'Rekap Absensi'
+          OnClick = dxRekapAbsensiClick
         end
       end
     end

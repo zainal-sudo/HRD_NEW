@@ -16,7 +16,7 @@ uses
   dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue, cxControls,
   cxContainer, cxEdit, cxTextEdit, cxMaskEdit, cxDropDownEdit,
   cxLookupEdit, cxDBLookupEdit, cxDBExtLookupComboBox, DBClient, Math,
-  AdvEdBtn, cxGroupBox;
+  AdvEdBtn, cxGroupBox, DateUtils;
 
 type
   TfrmLembur = class(TForm)
@@ -56,6 +56,8 @@ type
     lbl3: TLabel;
     lbl4: TLabel;
     edtJabatan: TAdvEdit;
+    lbl5: TLabel;
+    edtDurasi: TAdvEdit;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -72,11 +74,13 @@ type
     procedure dtTanggalChange(Sender: TObject);
     procedure btn1Click(Sender: TObject);
     function HitungPoin(AMulai, AAkhir: TDateTime): Double;
-    procedure dtJamAkhirExit(Sender: TObject);
     procedure edtNIKClickBtn(Sender: TObject);
     procedure ShowAbsensi;
     procedure edtNIKChange(Sender: TObject);
     procedure detailkaryawan;
+    function HitungDurasi(AMulai, AAkhir: TDateTime): string;
+    procedure dtJamAkhirChange(Sender: TObject);
+    procedure dtJamMulaiChange(Sender: TObject);
   private
     FFLAGEDIT: Boolean;
     FFLAGUPLOAD: Boolean;
@@ -112,7 +116,8 @@ begin
   dtJamAkhir.Time := Time;
   edtKeterangan.Clear;
   Image1.Picture := nil;
-  edtNomor.Text := getmaxkode;  
+  edtNomor.Text := getmaxkode;
+  edtDurasi.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time); 
   edtNIK.SetFocus;
 end;
 
@@ -123,7 +128,7 @@ var
 begin
   if (Key = VK_F1) AND (Sender = edtNIK) then
   begin
-    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_status_aktif = 1 AND  kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
+    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_status_aktif = 1 AND kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
     Application.CreateForm(Tfrmbantuan2, frmbantuan2);
     frmBantuan2.SQLMaster := sqlbantuan;
     frmBantuan2.ShowModal;
@@ -146,13 +151,13 @@ begin
     try
       if (FLAGEDIT) and ( not cekedit(frmMenu.KDUSER,self.name)) then
       begin
-        MessageDlg('Anda tidak berhak Edit di Modul ini',mtWarning, [mbOK],0);
+        MessageDlg('Anda tidak berhak Edit di Modul ini', mtWarning, [mbOK],0);
         Exit;
       End;
-    
+
       if (not FLAGEDIT) and ( not cekinsert(frmMenu.KDUSER,self.name)) then
       begin
-        MessageDlg('Anda tidak berhak Insert di Modul ini',mtWarning, [mbOK],0);;
+        MessageDlg('Anda tidak berhak Insert di Modul ini', mtWarning, [mbOK],0);;
         Exit;
       End;
 
@@ -211,13 +216,14 @@ begin
         edtKeterangan.Text := fieldbyname('lem_keterangan').AsString;
         Image1.Hint := fieldbyname('lem_foto').AsString;
         FID := fieldbyname('lem_nomor').Asstring;
+        edtDurasi.Text := FormatDateTime('HH:nn', FieldByName('lem_durasi').AsDateTime);
 
         detailkaryawan;
         ShowAbsensi;
         if (Image1.Hint <> '') then
         begin
           LoadImageFromURL(frmMenu.aurl + '/bukti/' + Image1.Hint, Image1);
-        end;        
+        end;
       end
       else
         FLAGEDIT := False;
@@ -239,14 +245,15 @@ begin
        + ' lem_jamakhir = ' + Quot(FormatDateTime('hh:nn:ss', dtJamAkhir.Time)) + ','
        + ' lem_keterangan = ' + Quot(edtKeterangan.Text) + ','
        + ' lem_foto = ' + Quot(afoto) + ','
-       + ' lem_poin = ' + floattostr(cstrtoFloat(edtPoin.Text))
+       + ' lem_poin = ' + floattostr(cstrtoFloat(edtPoin.Text)) + ','
+       + ' lem_durasi = ' + Quot(edtDurasi.Text)
        + ' WHERE lem_nomor = ' + quot(FID) + ';'
   else
   begin
     edtNomor.Text := getmaxkode;
 
     s := 'INSERT INTO tlembur '
-       + ' (lem_nomor, lem_kar_nik, lem_tanggal, lem_jammulai, lem_jamakhir, lem_keterangan, lem_foto, lem_poin) '
+       + ' (lem_nomor, lem_kar_nik, lem_tanggal, lem_jammulai, lem_jamakhir, lem_keterangan, lem_foto, lem_poin, lem_durasi) '
        + ' VALUES ( '
        + Quot(edtNomor.Text) + ','
        + Quot(edtNIK.Text) + ','
@@ -255,7 +262,8 @@ begin
        + Quot(FormatDateTime('hh:nn', dtJamAkhir.Time)) + ','
        + Quot(edtKeterangan.Text) + ','
        + Quot(afoto) + ','
-       + floattostr(cstrtoFloat(edtPoin.Text))
+       + floattostr(cstrtoFloat(edtPoin.Text)) + ','
+       + Quot(edtDurasi.Text)
        + ');';
   end;
   
@@ -389,7 +397,6 @@ begin
       end
       else
          result:= NOMERATOR+'.'+FormatDateTime('yymm',dtTanggal.Date)+'.'+RightStr(IntToStr(10000+fields[0].AsInteger+1),4);
-
     finally
       free;
     end;
@@ -450,14 +457,6 @@ begin
   end;
 
   Result := RoundTo(Result, -4);
-end;
-
-procedure TfrmLembur.dtJamAkhirExit(Sender: TObject);
-var
-  Poin: Double;
-begin
-  Poin := HitungPoin(dtJamMulai.Time, dtJamAkhir.Time);
-  edtPoin.Text := FloatToStr(Poin);
 end;
 
 procedure TfrmLembur.edtNIKClickBtn(Sender: TObject);
@@ -534,6 +533,39 @@ begin
       Free;
     end;
   end;
+end;
+
+function TfrmLembur.HitungDurasi(AMulai, AAkhir: TDateTime): string;
+var
+  SelisihMenit: Integer;
+  Jam, Menit: Integer;
+begin
+  AMulai := Frac(AMulai);
+  AAkhir := Frac(AAkhir);
+
+  if AAkhir < AMulai then
+    AAkhir := AAkhir + 1;
+
+  SelisihMenit := Round((AAkhir - AMulai) * 24 * 60);
+  Jam := SelisihMenit div 60;
+  Menit := SelisihMenit mod 60;
+
+  Result := Format('%.2d:%.2d', [Jam, Menit]);
+end;
+
+procedure TfrmLembur.dtJamAkhirChange(Sender: TObject);
+var
+  Poin: Double;
+begin
+  Poin := HitungPoin(dtJamMulai.Time, dtJamAkhir.Time);
+  edtPoin.Text := FloatToStr(Poin);
+
+  edtSelisih.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
+end;
+
+procedure TfrmLembur.dtJamMulaiChange(Sender: TObject);
+begin
+  edtSelisih.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
 end;
 
 end.

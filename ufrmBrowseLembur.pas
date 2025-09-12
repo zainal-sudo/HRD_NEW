@@ -53,7 +53,7 @@ procedure TfrmBrowseLembur.btnRefreshClick(Sender: TObject);
 begin
   Self.SQLMaster := 'SELECT a.lem_nomor Nomor, a.lem_kar_nik NIK, b.kar_nama Nama, c.nm_jabat Jabatan, d.nm_dept Departmen, e.nm_unit Unit, '
                     + ' a.lem_tanggal Tanggal, a.lem_jammulai JamMulai, a.lem_jamakhir JamAkhir, lem_keterangan Keterangan '
-                    + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out, a.lem_poin Poin, a.lem_foto foto '
+                    + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out, a.lem_poin Poin, a.lem_durasi Durasi, a.lem_foto foto '
                     + ' FROM tlembur a '
                     + ' INNER JOIN tkaryawan b ON a.lem_kar_nik = b.kar_nik '
                     + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
@@ -79,7 +79,8 @@ begin
   cxGrdMaster.Columns[10].Width :=100;
   cxGrdMaster.Columns[11].Width :=100;
   cxGrdMaster.Columns[11].Summary.FooterKind:=skSum;
-  cxGrdMaster.Columns[12].Visible := False;
+  cxGrdMaster.Columns[12].Width :=100;
+  cxGrdMaster.Columns[13].Visible := False;
 
 end;
 

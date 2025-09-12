@@ -1,0 +1,239 @@
+unit ufrmLapRekapAbsensi;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, AdvPanel, ComCtrls, StdCtrls, AdvEdit,SqlExpr, Menus,
+  cxLookAndFeelPainters, cxButtons,StrUtils, cxGraphics, cxLookAndFeels,
+   dxSkinsDefaultPainters, DBClient, cxControls, cxContainer,
+  cxEdit, AdvEdBtn, cxTextEdit, cxMaskEdit, cxDropDownEdit, cxLookupEdit,
+  cxDBLookupEdit, cxDBExtLookupComboBox, cxSpinEdit, cxTimeEdit, cxStyles,
+  dxSkinscxPCPainter, cxCustomData, cxFilter, cxData, cxDataStorage, DB,
+  cxDBData, cxGridLevel, cxGridCustomTableView, cxGridTableView,
+  cxGridDBTableView, cxClasses, cxGridCustomView, cxGrid, cxButtonEdit,
+  cxCheckBox, cxCurrencyEdit, AdvCombo, dxSkinsCore, dxSkinBlack,
+  dxSkinBlue, dxSkinCaramel, dxSkinCoffee, dxSkinDarkSide,
+  dxSkinGlassOceans, dxSkiniMaginary, dxSkinLilian, dxSkinLiquidSky,
+  dxSkinLondonLiquidSky, dxSkinMcSkin, dxSkinMoneyTwins,
+  dxSkinOffice2007Black, dxSkinOffice2007Blue, dxSkinOffice2007Green,
+  dxSkinOffice2007Pink, dxSkinOffice2007Silver, dxSkinPumpkin,
+  dxSkinSilver, dxSkinSpringTime, dxSkinStardust, dxSkinSummer2008,
+  dxSkinValentine, dxSkinXmas2008Blue, dxSkinDarkRoom, dxSkinFoggy,
+  dxSkinSeven, dxSkinSharp, DBAccess, MyAccess, MemDS;
+
+type
+  TfrmLapRekapAbsensi = class(TForm)
+    AdvPanel1: TAdvPanel;
+    AdvPanel3: TAdvPanel;
+    cxButton8: TcxButton;
+    AdvPanel2: TAdvPanel;
+    lbljudul: TLabel;
+    AdvPanel4: TAdvPanel;
+    cxGrid1: TcxGrid;
+    cxGridLembur: TcxGridDBTableView;
+    clNama: TcxGridDBColumn;
+    clTanggal: TcxGridDBColumn;
+    cxGrid1Level1: TcxGridLevel;
+    Label1: TLabel;
+    Button1: TButton;
+    cxButton7: TcxButton;
+    savedlg: TSaveDialog;
+    startdate: TDateTimePicker;
+    Label2: TLabel;
+    enddate: TDateTimePicker;
+    clCabang: TcxGridDBColumn;
+    clTerlambat: TcxGridDBColumn;
+    clPotongGaji: TcxGridDBColumn;
+    clJabatan: TcxGridDBColumn;
+    clHari: TcxGridDBColumn;
+    cxStyleRepository2: TcxStyleRepository;
+    cxStyle2: TcxStyle;
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
+    clCuti: TcxGridDBColumn;
+    clKeterangan: TcxGridDBColumn;
+    clJmlMasuk: TcxGridDBColumn;
+    MyConnection1: TMyConnection;
+    MyQuery1: TMyQuery;
+    clSakit: TcxGridDBColumn;
+    procedure refreshdata;
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormKeyPress(Sender: TObject; var Key: Char);
+
+    procedure loaddataall ;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure cxButton8Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    function GetCDSLembur: TClientDataSet;
+    procedure FormCreate(Sender: TObject);
+    procedure RefreshClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure cxButton7Click(Sender: TObject);
+    procedure cxGridLemburStylesGetContentStyle(
+      Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
+      AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
+  private
+    FID: string;
+    { Private declarations }
+  protected
+    FCDSLembur: TClientDataSet;
+  public
+    property CDSLembur: TClientDataSet read GetCDSLembur write FCDSLembur;
+    property ID: string read FID write FID;
+    { Public declarations }
+  end;
+
+var
+  frmLapRekapAbsensi: TfrmLapRekapAbsensi;
+
+implementation
+uses ufrmMenu, uModuleConnection, uFrmbantuan2, Ulib, cxGridExportLink, uReport;
+
+{$R *.dfm}
+
+procedure TfrmLapRekapAbsensi.refreshdata;
+begin
+  StartDate.DateTime := StrToDate(FormatDateTime('mm',Now)+'/01/'+FormatDateTime('yyyy',Now));
+  EndDate.DateTime := Date;
+  CDSLembur.EmptyDataSet;
+  CDSLembur.Append;
+  CDSLembur.Post;
+end;
+
+procedure TfrmLapRekapAbsensi.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_F8 then
+  begin
+    Release;
+  end;
+end;
+
+procedure TfrmLapRekapAbsensi.FormKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    SelectNext(ActiveControl,True,True);
+end;
+
+procedure TfrmLapRekapAbsensi.loaddataall ;
+var
+  s, cbg: string;
+  i: Integer;
+  tsql : TmyQuery;
+  aterjadwal, atidakterjadwal: Integer;
+begin
+  s := 'call rekap_absensi('+quotd(startdate.date)+','+quotd(enddate.date)+','+quot(frmMenu.KDUNIT)+');';
+  MyQuery1.Close;
+  MyQuery1.SQL.Text := s;
+  MyQuery1.Open;
+  
+  with MyQuery1 do
+  begin
+    try
+      i := 1;
+      CDSLembur.EmptyDataSet;
+      CDSLembur.Append;
+
+      while  not Eof do
+      begin
+        CDSLembur.Append;
+        CDSLembur.fieldbyname('Nama').AsString := fieldbyname('Nama').AsString;
+        CDSLembur.fieldbyname('Nik').asstring := fieldbyname('Nik').asstring;
+        CDSLembur.fieldbyname('Hari').asstring := fieldbyname('Hari').asstring;
+        CDSLembur.fieldbyname('Cabang').asstring := fieldbyname('Cabang').AsString;
+        CDSLembur.fieldbyname('Jabatan').asstring := fieldbyname('Jabatan').AsString;
+        CDSLembur.fieldbyname('Masuk').asstring := fieldbyname('Masuk').AsString;
+        CDSLembur.fieldbyname('Terlambat').asstring := fieldbyname('Terlambat').AsString;
+        CDSLembur.fieldbyname('PotongGaji').asstring := fieldbyname('Potong_Gaji').AsString;
+        CDSLembur.fieldbyname('Cuti').asstring := fieldbyname('Cuti').AsString;
+        CDSLembur.fieldbyname('Sakit').asstring := fieldbyname('Sakit').AsString;
+        CDSLembur.fieldbyname('Keterangan').asstring := fieldbyname('Keterangan').AsString;
+        CDSLembur.Post;
+
+        i := i + 1;
+        next;
+      end;
+    finally
+    end;
+  end;
+end;
+
+procedure TfrmLapRekapAbsensi.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+  Release;
+end;
+
+procedure TfrmLapRekapAbsensi.cxButton8Click(Sender: TObject);
+begin
+  Release;
+end;
+
+procedure TfrmLapRekapAbsensi.FormShow(Sender: TObject);
+begin
+  refreshdata;
+end;
+
+function TfrmLapRekapAbsensi.GetCDSLembur: TClientDataSet;
+begin
+  If not Assigned(FCDSLembur) then
+  begin
+    FCDSLembur := TClientDataSet.Create(Self);
+    zAddField(FCDSLembur, 'Nama', ftString, False,100);
+    zAddField(FCDSLembur, 'Nik', ftString, False,30);
+    zAddField(FCDSLembur, 'Hari', ftString, False,20);
+    zAddField(FCDSLembur, 'Cabang', ftString, False,50);
+    zAddField(FCDSLembur, 'Jabatan', ftString, False,20);
+    zAddField(FCDSLembur, 'Masuk', ftString, False,20);
+    zAddField(FCDSLembur, 'Terlambat', ftString, False,20);
+    zAddField(FCDSLembur, 'PotongGaji', ftString, False,30);
+    zAddField(FCDSLembur, 'Cuti', ftString, False,20);
+    zAddField(FCDSLembur, 'Sakit', ftString, False,20);
+    zAddField(FCDSLembur, 'Keterangan', ftString, False,200);
+
+    FCDSLembur.CreateDataSet;
+  end;
+
+  Result := FCDSLembur;
+end;
+
+procedure TfrmLapRekapAbsensi.FormCreate(Sender: TObject);
+begin
+  TcxDBGridHelper(cxGridLembur).LoadFromCDS(CDSLembur, False, False);
+end;
+
+procedure TfrmLapRekapAbsensi.RefreshClick(Sender: TObject);
+begin
+  loaddataall;
+end;
+
+procedure TfrmLapRekapAbsensi.Button1Click(Sender: TObject);
+begin
+  loaddataall;
+end;
+
+procedure TfrmLapRekapAbsensi.cxButton7Click(Sender: TObject);
+begin
+  if SaveDlg.Execute then
+    ExportGridToExcel(SaveDlg.FileName, cxGrid1);
+
+  cxGridLembur.DataController.CollapseDetails;
+end;
+
+procedure TfrmLapRekapAbsensi.cxGridLemburStylesGetContentStyle(
+  Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
+  AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
+var
+  AColumn : TcxCustomGridTableItem;
+begin
+  AColumn := (Sender as TcxGridDBTableView).GetColumnByFieldName('status');
+
+  if (AColumn <> nil)  and (cVarToInt(ARecord.Values[AColumn.Index]) = 1) then
+    AStyle := cxStyle2;
+  if (AColumn <> nil)  and (cVarToInt(ARecord.Values[AColumn.Index]) =2) then
+    AStyle := cxStyle1;
+end;
+
+end.

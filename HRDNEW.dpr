@@ -23,7 +23,8 @@ uses
   ufrmLapAbsensi in 'ufrmLapAbsensi.pas',
   ufrmBrowseLembur in 'ufrmBrowseLembur.pas' {frmBrowseLembur},
   ufrmLembur in 'ufrmLembur.pas' {frmLembur},
-  uFrmPreviewImage in 'bantu\uFrmPreviewImage.pas' {frmPrevImg};
+  uFrmPreviewImage in 'bantu\uFrmPreviewImage.pas' {frmPrevImg},
+  ufrmLapRekapAbsensi in 'ufrmLapRekapAbsensi.pas' {frmLapRekapAbsensi};
 
 {$R *.res}
 

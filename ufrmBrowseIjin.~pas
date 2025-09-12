@@ -65,7 +65,7 @@ begin
   cxGrdMaster.Columns[5].Width :=200;
   cxGrdMaster.Columns[6].Width :=100;
   cxGrdMaster.Columns[7].Width :=100;
-  cxGrdMaster.Columns[8].Width :=150;
+  cxGrdMaster.Columns[8].Width :=200;
   cxGrdMaster.Columns[9].Visible := False;
 end;
 

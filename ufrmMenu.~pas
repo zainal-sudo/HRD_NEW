@@ -48,6 +48,7 @@ type
     dxNavBar1Group3: TdxNavBarGroup;
     dxAbsensi: TdxNavBarItem;
     StatusBar1: TStatusBar;
+    dxRekapAbsensi: TdxNavBarItem;
     procedure FormCreate(Sender: TObject);
     procedure bacafile;
     procedure Karyawan1Click(Sender: TObject);
@@ -66,6 +67,7 @@ type
     procedure dxLemburClick(Sender: TObject);
     procedure dxUnitClick(Sender: TObject);
     procedure dxAbsensiClick(Sender: TObject);
+    procedure dxRekapAbsensiClick(Sender: TObject);
   private
     aDatabase: string;
     aHost: string;
@@ -89,7 +91,7 @@ var
 
 implementation
 uses uModuleConnection, ufrmBrowseJabatan, ufrmBrowseKaryawan, ufrmBrowseDepartemen, ufrmUser, UfrmLogin, ufrmBrowseUnit,
-ufrmBrowseIjin, ufrmlapabsensi, ufrmBrowseLembur;
+ufrmBrowseIjin, ufrmlapabsensi, ufrmBrowseLembur, ufrmLapRekapAbsensi;
 
 {$R *.dfm}
 
@@ -145,11 +147,11 @@ var
 begin
   inherited;
 
-  if ( not ceKVIEW(frmMenu.KDUSER, AFormClass.ClassName)) then
-  begin
-       MessageDlg('Anda tidak berhak Membuka di Modul ini',mtWarning, [mbOK],0);
-     Exit;
-  End;
+//  if ( not ceKVIEW(frmMenu.KDUSER, AFormClass.ClassName)) then
+//  begin
+//       MessageDlg('Anda tidak berhak Membuka di Modul ini',mtWarning, [mbOK],0);
+//     Exit;
+//  End;
 
   for i := 0 to MDIChildCount - 1 do
   begin
@@ -316,6 +318,16 @@ begin
   if ActiveMDIChild.Caption <> 'Laporan Absensi' then
   begin
     ShowForm(TfrmLapAbsensi).Show;
+  end
+  else
+    ActiveMDIChild.WindowState := wsMaximized;
+end;
+
+procedure TfrmMenu.dxRekapAbsensiClick(Sender: TObject);
+begin
+  if ActiveMDIChild.Caption <> 'Rekap Absensi' then
+  begin
+    ShowForm(TfrmLapRekapAbsensi).Show;
   end
   else
     ActiveMDIChild.WindowState := wsMaximized;

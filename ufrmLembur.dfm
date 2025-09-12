@@ -103,7 +103,7 @@ object frmLembur: TfrmLembur
     end
     object Label4: TLabel
       Left = 18
-      Top = 206
+      Top = 230
       Width = 56
       Height = 13
       Caption = 'Keterangan'
@@ -131,14 +131,14 @@ object frmLembur: TfrmLembur
     end
     object lbl2: TLabel
       Left = 18
-      Top = 232
+      Top = 256
       Width = 68
       Height = 13
       Caption = 'Lampiran Foto'
     end
     object Image1: TImage
       Left = 176
-      Top = 233
+      Top = 257
       Width = 121
       Height = 120
       Center = True
@@ -149,7 +149,7 @@ object frmLembur: TfrmLembur
     end
     object Label6: TLabel
       Left = 18
-      Top = 181
+      Top = 205
       Width = 20
       Height = 13
       Caption = 'Poin'
@@ -165,7 +165,7 @@ object frmLembur: TfrmLembur
       Left = 16
       Top = 85
       Width = 59
-      Height = 12
+      Height = 13
       Caption = 'Departemen'
     end
     object lbl4: TLabel
@@ -175,9 +175,16 @@ object frmLembur: TfrmLembur
       Height = 13
       Caption = 'Jabatan'
     end
+    object lbl5: TLabel
+      Left = 18
+      Top = 183
+      Width = 30
+      Height = 13
+      Caption = 'Durasi'
+    end
     object edtKeterangan: TAdvEdit
       Left = 103
-      Top = 206
+      Top = 230
       Width = 306
       Height = 21
       AutoFocus = False
@@ -318,6 +325,7 @@ object frmLembur: TfrmLembur
       Time = 45899.369493425930000000
       Kind = dtkTime
       TabOrder = 3
+      OnChange = dtJamMulaiChange
     end
     object dtJamAkhir: TDateTimePicker
       Left = 287
@@ -329,11 +337,11 @@ object frmLembur: TfrmLembur
       Time = 45899.369493425930000000
       Kind = dtkTime
       TabOrder = 4
-      OnExit = dtJamAkhirExit
+      OnChange = dtJamAkhirChange
     end
     object btn1: TcxButton
       Left = 103
-      Top = 231
+      Top = 255
       Width = 65
       Height = 25
       Caption = 'Upload'
@@ -344,7 +352,7 @@ object frmLembur: TfrmLembur
     end
     object edtPoin: TAdvEdit
       Left = 103
-      Top = 181
+      Top = 205
       Width = 122
       Height = 21
       AutoFocus = False
@@ -800,6 +808,65 @@ object frmLembur: TfrmLembur
       Visible = True
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
+    end
+    object edtDurasi: TAdvEdit
+      Left = 103
+      Top = 182
+      Width = 121
+      Height = 21
+      AutoFocus = False
+      EditAlign = eaLeft
+      EditType = etString
+      ErrorMarkerPos = 0
+      ErrorMarkerLen = 0
+      ErrorColor = clRed
+      ErrorFontColor = clWhite
+      ExcelStyleDecimalSeparator = False
+      Flat = False
+      FlatLineColor = clBlack
+      FlatParentColor = True
+      FocusAlign = eaDefault
+      FocusBorder = False
+      FocusColor = clWindow
+      FocusFontColor = clWindowText
+      FocusLabel = False
+      FocusWidthInc = 0
+      ModifiedColor = clHighlight
+      DisabledColor = clSilver
+      URLColor = clBlue
+      ReturnIsTab = False
+      LengthLimit = 0
+      TabOnFullLength = False
+      Precision = 0
+      LabelPosition = lpLeftTop
+      LabelMargin = 4
+      LabelTransparent = False
+      LabelAlwaysEnabled = False
+      LabelFont.Charset = DEFAULT_CHARSET
+      LabelFont.Color = clWindowText
+      LabelFont.Height = -11
+      LabelFont.Name = 'MS Sans Serif'
+      LabelFont.Style = []
+      Lookup.CaseSensitive = False
+      Lookup.Color = clWindow
+      Lookup.DisplayCount = 4
+      Lookup.Enabled = False
+      Lookup.History = False
+      Lookup.NumChars = 2
+      Lookup.Multi = False
+      Lookup.Separator = ';'
+      Persistence.Enable = False
+      Persistence.Location = plInifile
+      Color = clWindow
+      Enabled = True
+      HintShowLargeText = False
+      OleDropTarget = False
+      OleDropSource = False
+      ReadOnly = True
+      Signed = False
+      TabOrder = 12
+      Transparent = False
+      Visible = True
     end
   end
   object AdvPanel3: TAdvPanel
