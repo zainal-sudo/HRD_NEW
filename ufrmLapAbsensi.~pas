@@ -142,7 +142,8 @@ begin
     cxGrdMaster.Columns[7].Width := 100;
     cxGrdMaster.Columns[8].Width := 100;
     cxGrdMaster.Columns[9].Width := 100;
-    cxGrdMaster.FieldByName('foto').Visible := False;
+    cxGrdMaster.Columns[10].Width := 100;
+    cxGrdMaster.Columns[11].Visible := False;
 //    CDSMaster.FieldByName('Keterangan').Size := 200;
     CDSMaster.First;
 
@@ -185,7 +186,7 @@ begin
          ' WHERE k.kar_kd_unit = 19 ' +
          ' AND DATE(h.tanggal) BETWEEN ' + QuotD(startdate.Date) +
          ' AND ' + QuotD(enddate.Date) + '; ' +
-         ' INSERT INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
+         ' INSERT IGNORE INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
          ' SELECT b.kar_nik, a.tanggal, a.status_absen ' +
          ' FROM hrd_roti.tabsensitampung a ' +
          ' INNER JOIN hrd_roti.tkaryawan b ON b.id_kar = a.id_kar ' +
