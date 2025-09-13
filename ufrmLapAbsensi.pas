@@ -226,7 +226,7 @@ begin
          ' WHERE k.kar_kd_unit = 20 ' +
          ' AND DATE(h.tanggal) BETWEEN ' + QuotD(startdate.Date) +
          ' AND ' + QuotD(enddate.Date) + '; ' +
-         ' INSERT INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
+         ' INSERT IGNORE INTO hrd.tabsensitampung (kar_nik, tanggal, status_absen) ' +
          ' SELECT b.kar_nik, a.tanggal, a.status_absen ' +
          ' FROM hrd_entri.tabsensitampung a ' +
          ' INNER JOIN hrd_entri.tkaryawan b ON b.id_kar = a.id_kar ' +

@@ -24,9 +24,6 @@ uses
 type
   TfrmPrevImg = class(TForm)
     AdvPanel4: TAdvPanel;
-    AdvPanel5: TAdvPanel;
-    btnOK: TcxButton;
-    btnTutup: TcxButton;
     ScrollBox1: TScrollBox;
     cxImage1: TcxImage;
     procedure FormShow(Sender: TObject);

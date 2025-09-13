@@ -1,8 +1,8 @@
 object frmPrevImg: TfrmPrevImg
-  Left = 304
-  Top = 187
-  Width = 1010
-  Height = 545
+  Left = 75
+  Top = 15
+  Width = 1428
+  Height = 938
   BorderIcons = []
   Caption = 'Preview'
   Color = clBtnFace
@@ -20,8 +20,8 @@ object frmPrevImg: TfrmPrevImg
   object AdvPanel4: TAdvPanel
     Left = 0
     Top = 0
-    Width = 994
-    Height = 506
+    Width = 1412
+    Height = 899
     Align = alClient
     TabOrder = 0
     UseDockManager = True
@@ -84,8 +84,8 @@ object frmPrevImg: TfrmPrevImg
     FullHeight = 0
     object AdvPanel5: TAdvPanel
       Left = 1
-      Top = 471
-      Width = 992
+      Top = 864
+      Width = 1410
       Height = 34
       Align = alBottom
       TabOrder = 0
@@ -148,7 +148,7 @@ object frmPrevImg: TfrmPrevImg
       URLColor = clBlue
       FullHeight = 0
       object btnOK: TcxButton
-        Left = 836
+        Left = 1254
         Top = 1
         Width = 80
         Height = 32
@@ -193,7 +193,7 @@ object frmPrevImg: TfrmPrevImg
           0000000000000000010101010102000000000000000000000000}
       end
       object btnTutup: TcxButton
-        Left = 916
+        Left = 1334
         Top = 1
         Width = 75
         Height = 32
@@ -244,8 +244,8 @@ object frmPrevImg: TfrmPrevImg
     object ScrollBox1: TScrollBox
       Left = 1
       Top = 1
-      Width = 992
-      Height = 470
+      Width = 1410
+      Height = 863
       Align = alClient
       BorderStyle = bsNone
       TabOrder = 1
@@ -254,8 +254,8 @@ object frmPrevImg: TfrmPrevImg
         Top = 0
         Align = alClient
         TabOrder = 0
-        Height = 470
-        Width = 992
+        Height = 863
+        Width = 1410
       end
     end
   end
