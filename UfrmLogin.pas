@@ -138,7 +138,7 @@ begin
         frmmenu.Enabled := true;
 
         frmmenu.KDUSER := Fields[0].AsString;
-        if Fields[1].AsString = '18' then
+        if Fields[0].AsString = 'pusat' then
           frmmenu.KDUNIT := '%'
         else
           frmmenu.KDUNIT := Fields[1].AsString;

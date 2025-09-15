@@ -149,7 +149,8 @@ begin
         CDSLembur.fieldbyname('Masuk').asstring := fieldbyname('Masuk').AsString;
         CDSLembur.fieldbyname('Terlambat').asstring := fieldbyname('Terlambat').AsString;
         CDSLembur.fieldbyname('PotongGaji').asstring := fieldbyname('Potong_Gaji').AsString;
-        CDSLembur.fieldbyname('Cuti').asstring := fieldbyname('Cuti').AsString;
+        CDSLembur.fieldbyname('CutiTahunan').asstring := fieldbyname('CutiTahunan').AsString;
+        CDSLembur.fieldbyname('CutiKhusus').asstring := fieldbyname('CutiKhusus').AsString;
         CDSLembur.fieldbyname('Sakit').asstring := fieldbyname('Sakit').AsString;
         CDSLembur.fieldbyname('Keterangan').asstring := fieldbyname('Keterangan').AsString;
         CDSLembur.fieldbyname('JamLembur').asstring := FormatDateTime('hh:nn:ss', FieldByName('TotalJamLembur').AsDateTime);
@@ -193,7 +194,8 @@ begin
     zAddField(FCDSLembur, 'Masuk', ftString, False,20);
     zAddField(FCDSLembur, 'Terlambat', ftString, False,20);
     zAddField(FCDSLembur, 'PotongGaji', ftString, False,30);
-    zAddField(FCDSLembur, 'Cuti', ftString, False,20);
+    zAddField(FCDSLembur, 'CutiTahunan', ftString, False,20);
+    zAddField(FCDSLembur, 'CutiKhusus', ftString, False,20);
     zAddField(FCDSLembur, 'Sakit', ftString, False,20);
     zAddField(FCDSLembur, 'Keterangan', ftString, False,200);
     zAddField(FCDSLembur, 'JamLembur', ftString, False,100);

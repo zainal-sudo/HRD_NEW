@@ -28,7 +28,7 @@ type
     procedure edtuserKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
-    procedure getcabangaktif(aUnit: String)
+    procedure getcabangaktif(aUnit: String);
   private
     { Private declarations }
   public

@@ -149,10 +149,11 @@ begin
         CDSLembur.fieldbyname('Masuk').asstring := fieldbyname('Masuk').AsString;
         CDSLembur.fieldbyname('Terlambat').asstring := fieldbyname('Terlambat').AsString;
         CDSLembur.fieldbyname('PotongGaji').asstring := fieldbyname('Potong_Gaji').AsString;
-        CDSLembur.fieldbyname('Cuti').asstring := fieldbyname('Cuti').AsString;
+        CDSLembur.fieldbyname('CutiTahunan').asstring := fieldbyname('CutiTahunan').AsString;
+        CDSLembur.fieldbyname('CutiKhusus').asstring := fieldbyname('CutiKhusus').AsString;
         CDSLembur.fieldbyname('Sakit').asstring := fieldbyname('Sakit').AsString;
         CDSLembur.fieldbyname('Keterangan').asstring := fieldbyname('Keterangan').AsString;
-        CDSLembur.fieldbyname('JamLembur').asstring := fieldbyname('TotalJamLembur').AsString;
+        CDSLembur.fieldbyname('JamLembur').asstring := FormatDateTime('hh:nn:ss', FieldByName('TotalJamLembur').AsDateTime);
         CDSLembur.fieldbyname('PoinLembur').asstring := fieldbyname('TotalPoinLembur').AsString;
         CDSLembur.Post;
 

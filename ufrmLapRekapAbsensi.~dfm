@@ -535,6 +535,7 @@ object frmLapRekapAbsensi: TfrmLapRekapAbsensi
           Width = 130
         end
         object clPoinLembur: TcxGridDBColumn
+          Caption = 'Poin Lembur'
           DataBinding.FieldName = 'PoinLembur'
           Options.Editing = False
           Width = 100
