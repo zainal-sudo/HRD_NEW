@@ -515,9 +515,16 @@ object frmLapRekapAbsensi: TfrmLapRekapAbsensi
           Options.Editing = False
           Width = 100
         end
-        object clCuti: TcxGridDBColumn
-          DataBinding.FieldName = 'Cuti'
+        object clCutiTahunan: TcxGridDBColumn
+          Caption = 'Cuti Tahunan'
+          DataBinding.FieldName = 'CutiTahunan'
           Options.Editing = False
+          Width = 75
+        end
+        object clCutiKhusus: TcxGridDBColumn
+          Caption = 'Cuti Khusus'
+          DataBinding.FieldName = 'CutiKhusus'
+          Width = 75
         end
         object clSakit: TcxGridDBColumn
           DataBinding.FieldName = 'Sakit'

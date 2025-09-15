@@ -416,7 +416,7 @@ begin
   If not Assigned(FCDSAlasan) then
   begin
     S := 'select ji_id Kode, ji_keterangan Alasan'
-         + ' from tjenisijin';
+         + ' from tjenisijin ORDER BY ji_keterangan';
 
     FCDSAlasan := TConextMain.cOpenCDS(S, nil);
   end;

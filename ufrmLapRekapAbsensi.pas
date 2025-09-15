@@ -51,7 +51,7 @@ type
     cxStyle2: TcxStyle;
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
-    clCuti: TcxGridDBColumn;
+    clCutiTahunan: TcxGridDBColumn;
     clKeterangan: TcxGridDBColumn;
     clJmlMasuk: TcxGridDBColumn;
     MyConnection1: TMyConnection;
@@ -59,6 +59,7 @@ type
     clSakit: TcxGridDBColumn;
     clJamLembur: TcxGridDBColumn;
     clPoinLembur: TcxGridDBColumn;
+    clCutiKhusus: TcxGridDBColumn;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);

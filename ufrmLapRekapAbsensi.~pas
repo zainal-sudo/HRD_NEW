@@ -194,7 +194,8 @@ begin
     zAddField(FCDSLembur, 'Masuk', ftString, False,20);
     zAddField(FCDSLembur, 'Terlambat', ftString, False,20);
     zAddField(FCDSLembur, 'PotongGaji', ftString, False,30);
-    zAddField(FCDSLembur, 'Cuti', ftString, False,20);
+    zAddField(FCDSLembur, 'CutiTahunan', ftString, False,20);
+    zAddField(FCDSLembur, 'CutiKhusus', ftString, False,20);
     zAddField(FCDSLembur, 'Sakit', ftString, False,20);
     zAddField(FCDSLembur, 'Keterangan', ftString, False,200);
     zAddField(FCDSLembur, 'JamLembur', ftString, False,100);
