@@ -57,6 +57,8 @@ type
     MyConnection1: TMyConnection;
     MyQuery1: TMyQuery;
     clSakit: TcxGridDBColumn;
+    clJamLembur: TcxGridDBColumn;
+    clPoinLembur: TcxGridDBColumn;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -150,6 +152,8 @@ begin
         CDSLembur.fieldbyname('Cuti').asstring := fieldbyname('Cuti').AsString;
         CDSLembur.fieldbyname('Sakit').asstring := fieldbyname('Sakit').AsString;
         CDSLembur.fieldbyname('Keterangan').asstring := fieldbyname('Keterangan').AsString;
+        CDSLembur.fieldbyname('JamLembur').asstring := FormatDateTime('hh:nn:ss', FieldByName('TotalJamLembur').AsDateTime);
+        CDSLembur.fieldbyname('PoinLembur').asstring := fieldbyname('TotalPoinLembur').AsString;
         CDSLembur.Post;
 
         i := i + 1;
@@ -192,6 +196,8 @@ begin
     zAddField(FCDSLembur, 'Cuti', ftString, False,20);
     zAddField(FCDSLembur, 'Sakit', ftString, False,20);
     zAddField(FCDSLembur, 'Keterangan', ftString, False,200);
+    zAddField(FCDSLembur, 'JamLembur', ftString, False,100);
+    zAddField(FCDSLembur, 'PoinLembur', ftString, False,30);
 
     FCDSLembur.CreateDataSet;
   end;

@@ -45,11 +45,15 @@ implementation
 procedure TfrmBrowseKaryawan.btnRefreshClick(Sender: TObject);
 begin
   Self.SQLMaster := 'SELECT kar_nik NIK, kar_nama Nama, kar_alamat Alamat, kar_telp Telp, kar_tgl_masuk Masuk, kar_tempatlahir TempatLahir, '
-                    + ' kar_tgllahir TglLahir, c.nm_jabat Jabatan, d.nm_dept Departmen, nm_unit Unit '
+                    + ' kar_tgllahir TglLahir, c.nm_jabat Jabatan, d.nm_dept Departmen, nm_unit Unit, '
+                    + ' CASE '
+                    + '      WHEN a.kar_status_aktif = 1 THEN "Aktif" '
+                    + '      ELSE "Tidak Aktif" '
+                    + '  END AS Status '
                     + ' FROM tkaryawan a '
-                    + ' INNER JOIN tunit b ON b.kd_unit = a.kar_kd_unit '
-                    + ' INNER JOIN tjabatan c ON c.kd_jabat = a.kar_kd_jabat '
-                    + ' INNER JOIN tdept d ON d.kd_dept = a.kar_kd_dept '
+                    + ' LEFT JOIN tunit b ON b.kd_unit = a.kar_kd_unit '
+                    + ' LEFT JOIN tjabatan c ON c.kd_jabat = a.kar_kd_jabat '
+                    + ' LEFT JOIN tdept d ON d.kd_dept = a.kar_kd_dept '
                     + ' WHERE a.kar_kd_unit LIKE ' + quot(frmMenu.KDUNIT);
   inherited;
   cxGrdMaster.ApplyBestFit();

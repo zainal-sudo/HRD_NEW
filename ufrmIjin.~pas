@@ -121,7 +121,7 @@ var
 begin
   if (Key = VK_F1) AND (Sender = edtNIK) then
   begin
-    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
+    sqlbantuan := 'SELECT kar_nik NIK, kar_nama from tkaryawan where kar_status_aktif = 1 AND kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT);
     Application.CreateForm(Tfrmbantuan2, frmbantuan2);
     frmBantuan2.SQLMaster := sqlbantuan;
     frmBantuan2.ShowModal;

@@ -1,9 +1,9 @@
 object frmLapRekapAbsensi: TfrmLapRekapAbsensi
-  Left = 257
-  Top = 210
+  Left = 307
+  Top = 251
   Width = 1038
   Height = 398
-  Caption = 'Laporan Absensi'
+  Caption = '-'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -527,6 +527,17 @@ object frmLapRekapAbsensi: TfrmLapRekapAbsensi
           DataBinding.FieldName = 'Keterangan'
           Options.Editing = False
           Width = 300
+        end
+        object clJamLembur: TcxGridDBColumn
+          Caption = 'Total Jam Lembur'
+          DataBinding.FieldName = 'JamLembur'
+          Options.Editing = False
+          Width = 130
+        end
+        object clPoinLembur: TcxGridDBColumn
+          DataBinding.FieldName = 'PoinLembur'
+          Options.Editing = False
+          Width = 100
         end
       end
       object cxGrid1Level1: TcxGridLevel
