@@ -14,7 +14,7 @@ uses
   dxSkinStardust, dxSkinSummer2008, dxSkinsDefaultPainters,
   dxSkinValentine, dxSkinXmas2008Blue, dxSkinsdxNavBar2Painter,
   dxNavBarCollns, cxClasses, dxNavBarBase, ImgList, cxControls, dxNavBar,
-  dxDockPanel, ComCtrls, cxContainer, cxEdit, cxProgressBar;
+  dxDockPanel, ComCtrls, cxContainer, cxEdit, cxProgressBar, jpeg, ExtCtrls;
 
 type
   TfrmMenu = class(TForm)
@@ -49,6 +49,7 @@ type
     dxAbsensi: TdxNavBarItem;
     StatusBar1: TStatusBar;
     dxRekapAbsensi: TdxNavBarItem;
+    Image1: TImage;
     procedure FormCreate(Sender: TObject);
     procedure bacafile;
     procedure Karyawan1Click(Sender: TObject);
