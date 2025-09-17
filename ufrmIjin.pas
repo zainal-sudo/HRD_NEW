@@ -30,7 +30,7 @@ type
     lbljudul: TLabel;
     cxButton2: TcxButton;
     cxButton1: TcxButton;
-    dtMulai: TDateTimePicker;
+    dtTanggal: TDateTimePicker;
     cxLookupAlasan: TcxExtLookupComboBox;
     Label1: TLabel;
     Label4: TLabel;
@@ -52,8 +52,6 @@ type
     edtJabatan: TAdvEdit;
     lbl5: TLabel;
     edtNama: TAdvEdit;
-    Label7: TLabel;
-    dtAkhir: TDateTimePicker;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -65,22 +63,20 @@ type
     procedure cxButton8Click(Sender: TObject);
     procedure cxButton2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    function getmaxkode(aTanggal:TDateTime; aCount: Integer = 1):string;
+    function getmaxkode:string;
     procedure edtNomorExit(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure dtMulaiChange(Sender: TObject);
+    procedure dtTanggalChange(Sender: TObject);
     procedure btn1Click(Sender: TObject);
     procedure edtNIKClickBtn(Sender: TObject);
     procedure ShowAbsensi;
     procedure edtNIKChange(Sender: TObject);
     procedure detailkaryawan;
-    function IsHariLibur(ATanggal: TDateTime; ATipe: string): Boolean;
   private
     FCDSAlasan: TClientDataset;
     FFLAGEDIT: Boolean;
     FFLAGUPLOAD: Boolean;
     FID: string;
-    FJAMKERJA: String;
     function GetCDSAlasan: TClientDataset;
     { Private declarations }
   public
@@ -88,7 +84,6 @@ type
     property FLAGEDIT: Boolean read FFLAGEDIT write FFLAGEDIT;
     property FLAGUPLOAD: Boolean read FFLAGUPLOAD write FFLAGUPLOAD;
     property ID: string read FID write FID;
-    property JAMKERJA: string read FJAMKERJA write FJAMKERJA;
     { Public declarations }
   end;
 
@@ -106,18 +101,16 @@ uses uModuleConnection, DB, ufrmMenu, Ulib, uFrmbantuan2;
 
 procedure TfrmIjin.refreshdata;
 begin
+
   FID:='';
   FLAGEDIT := FALSE;
   FLAGUPLOAD := FALSE;
-  Label7.Visible := True;
-  dtAkhir.Visible := True;
   edtNIK.clear;
-  dtMulai.Date := Date;
-  dtAkhir.Date := Date;
+  dtTanggal.Date := Date;
   cxLookupAlasan.ItemIndex := 0;
   edtKeterangan.Clear;
   Image1.Picture := nil;
-  edtNomor.Text := getmaxkode(dtMulai.Date);
+  edtNomor.Text := getmaxkode;
   edtNIK.SetFocus;
 end;
 
@@ -213,11 +206,8 @@ begin
       if not Eof then
       begin
         FLAGEDIT := True;
-        Label7.Visible := False;
-        dtAkhir.Visible := False;
         edtNIK.Text := fieldbyname('kar_nik').AsString;
-        dtMulai.Date := fieldbyname('tanggal').AsDateTime;
-        dtAkhir.Date := fieldbyname('tanggal').AsDateTime;
+        dtTanggal.Date := fieldbyname('tanggal').AsDateTime;
         cxLookupAlasan.Text := fieldbyname('alasan').AsString;
         edtKeterangan.Text := fieldbyname('keterangan').AsString;
         Image1.Hint := fieldbyname('ij_foto').AsString;
@@ -240,11 +230,7 @@ end;
 
 procedure TfrmIjin.simpandata(afoto:string);
 var
-  s: string;
-  tt: TStrings;
-  i: Integer;
-  atgl: TDateTime;
-  anomor: string;
+  s:string;
 begin
 //  if FLAGUPLOAD then
 //  begin
@@ -275,7 +261,7 @@ begin
 //  else
 //    foto := Image1.Hint;
 
- { if FLAGEDIT then
+  if FLAGEDIT then
     s := 'UPDATE tijin SET '
        + ' kar_nik = ' + Quot(edtNIK.Text) + ','
        + ' tanggal = ' + QuotD(dtTanggal.DateTime) + ','
@@ -300,106 +286,7 @@ begin
   end;
   
   EnsureConnected(frmMenu.MyConnection1);
-  ExecSQLDirect(frmMenu.MyConnection1, s);}
-
- if FLAGEDIT then
- begin
-    s := 'UPDATE tijin SET '
-       + ' kar_nik = ' + Quot(edtNIK.Text) + ','
-       + ' tanggal = ' + QuotD(dtMulai.DateTime) + ','
-       + ' alasan = ' + Quot(cxLookupAlasan.Text) + ','
-       + ' keterangan = ' + Quot(edtKeterangan.Text) + ','
-       + ' ij_foto = ' + Quot(afoto)
-       + ' WHERE ij_nomor = ' + quot(FID) + ';';
-       
-    EnsureConnected(frmMenu.MyConnection1);
-    ExecSQLDirect(frmMenu.MyConnection1, s);
- end
-  else
-  begin
-    tt := TStringList.Create;
-    try
-      atgl := dtMulai.Date;
-      i := 1;
-
-      while atgl <= dtAkhir.Date do
-      begin
-        if not IsHariLibur(atgl, JAMKERJA) then
-        begin
-          anomor := getmaxkode(atgl, i);
-
-          s := 'INSERT INTO tijin '
-             + ' (ij_nomor, kar_nik, tanggal, alasan, keterangan, ij_foto) '
-             + ' VALUES ( '
-             + Quot(anomor) + ','
-             + Quot(edtNIK.Text) + ','
-             + QuotD(atgl) + ','
-             + Quot(cxLookupAlasan.Text) + ','
-             + Quot(edtKeterangan.Text) + ','
-             + Quot(afoto)
-             + ');';
-
-          tt.Append(s);
-          Inc(i);
-        end;
-
-        atgl := atgl + 1;
-      end;
-
-      for i := 0 to tt.Count - 1 do
-      begin
-        EnsureConnected(frmMenu.MyConnection1);
-        ExecSQLDirect(frmMenu.MyConnection1, tt[i]);
-      end;
-    finally
-      tt.Free;
-    end;
-  end;
-end;
-
-function TfrmIjin.IsHariLibur(ATanggal: TDateTime; ATipe: string): Boolean;
-var
-  dayName, s: string;
-  arc: Integer;
-  tsql: TmyQuery;
-begin
-  Result := False;
-
-  if SameText(ATipe, 'Normal') then
-  begin
-    s:= ' SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
-    EnsureConnected(frmMenu.MyConnection1);
-    tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
-    with tsql do
-    begin
-      try
-        Result := FieldByName('jml').AsInteger > 0;
-      finally
-        Free;
-      end;
-    end;
-  end;
-
-  if SameText(ATipe, 'Shift libur') then
-  begin
-    s:= ' SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
-    EnsureConnected(frmMenu.MyConnection1);
-    tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
-    with tsql do
-    begin
-      try
-        Result := FieldByName('jml').AsInteger > 0;
-      finally
-        Free;
-      end;
-    end;
-
-    if not Result then
-    begin
-      if DayOfWeek(ATanggal) = 7 then
-        Result := True;
-    end;
-  end;
+  ExecSQLDirect(frmMenu.MyConnection1, s);
 end;
 
 procedure TfrmIjin.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -542,23 +429,23 @@ begin
     LoadFromCDS(CDSAlasan, 'Kode', 'Alasan',['Kode'],Self);
 end;
 
-function TfrmIjin.getmaxkode(aTanggal:TDateTime; aCount: Integer = 1):string;
+function TfrmIjin.getmaxkode:string;
 var
   s:string;
   arc: Integer;
 begin
   s := 'select max(right(ij_nomor,4)) from tijin '
-       + ' where ij_nomor like ' + quot(NOMERATOR+'.'+FormatDateTime('yymm', aTanggal)+'.%');
+       + ' where ij_nomor like ' + quot(NOMERATOR+'.'+FormatDateTime('yymm',dtTanggal.Date)+'.%');
 
   with xOpenQuery(s, arc, frmMenu.MyConnection1) do
   begin
     try
       if Fields[0].AsString = '' then
       begin
-         result:= NOMERATOR+'.'+FormatDateTime('yymm', aTanggal)+'.'+RightStr(IntToStr(10000+aCount),4)
+         result:= NOMERATOR+'.'+FormatDateTime('yymm',dtTanggal.Date)+'.'+RightStr(IntToStr(10000+1),4)
       end
       else
-         result:= NOMERATOR+'.'+FormatDateTime('yymm', aTanggal)+'.'+RightStr(IntToStr(10000+fields[0].AsInteger+aCount),4);
+         result:= NOMERATOR+'.'+FormatDateTime('yymm',dtTanggal.Date)+'.'+RightStr(IntToStr(10000+fields[0].AsInteger+1),4);
 
     finally
       free;
@@ -576,10 +463,11 @@ begin
   refreshdata;
 end;
 
-procedure TfrmIjin.dtMulaiChange(Sender: TObject);
+procedure TfrmIjin.dtTanggalChange(Sender: TObject);
 begin
-  if (edtNIK.Text = '') OR (dtMulai.Date = 0) then Exit;
-  edtNomor.Text := getmaxkode(dtMulai.Date);
+  edtNomor.Text := getmaxkode;
+
+  if (edtNIK.Text = '') OR (dtTanggal.Date = 0) then Exit;
 
   ShowAbsensi;  
 end;
@@ -645,7 +533,7 @@ begin
   s:= 'select MIN(CASE WHEN status_absen = 1 THEN TIME(tanggal) END) AS Jam_in, '
       + ' MAX(CASE WHEN status_absen in (1,2) THEN TIME(tanggal) END) AS Jam_out '
       + ' from tabsensitampung where kar_nik = ' + Quot(edtNIK.Text)
-      + ' AND date(tanggal) = ' + QuotD(dtMulai.Date);
+      + ' AND date(tanggal) = ' + QuotD(dtTanggal.Date);
   EnsureConnected(frmMenu.MyConnection1);
   tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
   with tsql do
@@ -664,7 +552,7 @@ end;
 
 procedure TfrmIjin.edtNIKChange(Sender: TObject);
 begin
-  if (edtNIK.Text = '') OR (dtMulai.Date = 0) then Exit;
+  if (edtNIK.Text = '') OR (dtTanggal.Date = 0) then Exit;
 
   ShowAbsensi;
 end;
@@ -675,13 +563,11 @@ var
   tsql: TmyQuery;
   arc: Integer;
 begin
-  s:= ' SELECT a.kar_nama, b.nm_dept, c.nm_jabat, u.jam_kerja '
-    + ' FROM tkaryawan a '
-    + ' LEFT JOIN tdept b ON a.kar_kd_dept = b.kd_dept '
-    + ' LEFT JOIN tjabatan c ON a.kar_kd_jabat = c.kd_jabat '
-    + ' LEFT JOIN tunit u ON u.kd_unit = a.kar_kd_unit '
-    + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
-    
+  s:= 'SELECT a.kar_nama, b.nm_dept, c.nm_jabat '
+      + ' FROM karyawan a '
+      + ' INNER JOIN tdept b ON a.kar_dep_kode = b.kd_dept '
+      + ' INNER JOIN tjabatan c ON a.kar_jab_kode = c.kd_jabat '
+      + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
   EnsureConnected(frmMenu.MyConnection1);
   tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
   with tsql do
@@ -692,7 +578,6 @@ begin
         edtNama.Text := FieldByName('kar_nama').AsString;
         edtDepartemen.Text := FieldByName('nm_dept').AsString;
         edtJabatan.Text := FieldByName('nm_jabat').AsString;
-        JAMKERJA := FieldByName('jam_kerja').AsString;
       end;
     finally
       Free;

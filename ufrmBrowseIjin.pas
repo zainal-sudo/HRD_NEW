@@ -24,6 +24,7 @@ uses
 type
   TfrmBrowseIjin = class(TfrmCxBrowse)
     cxButton5: TcxButton;
+    cxButton9: TcxButton;
   procedure btnRefreshClick(Sender: TObject);
   procedure FormShow(Sender: TObject);
   procedure cxButton2Click(Sender: TObject);
@@ -31,6 +32,7 @@ type
   procedure cxButton6Click(Sender: TObject);
   procedure cxButton4Click(Sender: TObject);
     procedure cxButton5Click(Sender: TObject);
+    procedure cxButton9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,7 +43,7 @@ var
   frmBrowseIjin: TfrmBrowseIjin;
 
 implementation
-   uses ufrmIjin, uModuleConnection, ufrmMenu, uFrmPreviewImage;
+   uses ufrmIjin, ufrmIjin2, uModuleConnection, ufrmMenu, uFrmPreviewImage;
 {$R *.dfm}
 
 procedure TfrmBrowseIjin.btnRefreshClick(Sender: TObject);
@@ -86,7 +88,7 @@ begin
     frmijin  := frmmenu.ShowForm(TfrmIjin) as TfrmIjin;
     frmijin.edtNIK.SetFocus;
   end;
-  
+
   frmijin.Show;
 end;
 
@@ -154,6 +156,20 @@ begin
   Application.CreateForm(TfrmPrevImg, frmprevimg);
   frmprevimg.foto := CDSMaster.FieldByname('foto').AsString;
   frmprevimg.ShowModal;
+end;
+
+procedure TfrmBrowseIjin.cxButton9Click(Sender: TObject);
+var
+  frmijin2: TfrmIjin2;
+begin
+  inherited;
+  if ActiveMDIChild.Caption <> 'Ijin' then
+  begin
+    frmijin2  := frmmenu.ShowForm(TfrmIjin2) as TfrmIjin2;
+    frmijin2.edtNIK.SetFocus;
+  end;
+
+  frmijin2.Show;
 end;
 
 end.
