@@ -25,7 +25,6 @@ type
   TfrmLembur2 = class(TForm)
     AdvPanel1: TAdvPanel;
     Label3: TLabel;
-    edtKeterangan: TAdvEdit;
     AdvPanel3: TAdvPanel;
     cxButton8: TcxButton;
     AdvPanel2: TAdvPanel;
@@ -33,7 +32,6 @@ type
     cxButton2: TcxButton;
     cxButton1: TcxButton;
     dtTanggal: TDateTimePicker;
-    Label4: TLabel;
     Label5: TLabel;
     edtNomor: TAdvEdit;
     lbl2: TLabel;
@@ -54,6 +52,7 @@ type
     clPoin: TcxGridDBColumn;
     PopupMenu1: TPopupMenu;
     HapusRecord1: TMenuItem;
+    clKeterangan: TcxGridDBColumn;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -115,7 +114,6 @@ begin
   FLAGEDIT := FALSE;
   FLAGUPLOAD := FALSE;
   dtTanggal.Date := Date;
-  edtKeterangan.Clear;
   Image1.Picture := nil;
   edtNomor.Text := getmaxkode;
   dtTanggal.SetFocus;
@@ -250,7 +248,7 @@ begin
          + QuotD(dtTanggal.DateTime) + ','
          + Quot(FormatDateTime('hh:nn', CDSLembur.FieldByName('jamawal').AsDateTime)) + ','
          + Quot(FormatDateTime('hh:nn', CDSLembur.FieldByName('jamakhir').AsDateTime)) + ','
-         + Quot(edtKeterangan.Text) + ','
+         + Quot(CDSLembur.FieldByName('keterangan').AsString) + ','
          + Quot(afoto) + ','
          + Quot(CDSLembur.FieldByName('poin').AsString) + ','
          + Quot(CDSLembur.FieldByName('durasi').AsString)
@@ -500,6 +498,7 @@ begin
     zAddField(FCDSLembur, 'nama', ftString, False,100);
     zAddField(FCDSLembur, 'jamawal', ftDateTime, False, 20);
     zAddField(FCDSLembur, 'jamakhir', ftDateTime, False, 20);
+    zAddField(FCDSLembur, 'keterangan', ftString, False, 200);
     zAddField(FCDSLembur, 'durasi', ftString, False, 20);
     zAddField(FCDSLembur, 'poin', ftFloat, False);
     FCDSLembur.OnNewRecord := CDSLemburNewRecord;

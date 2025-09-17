@@ -106,10 +106,11 @@ uses uModuleConnection, DB, ufrmMenu, Ulib, uFrmbantuan2;
 
 procedure TfrmIjin.refreshdata;
 begin
-
   FID:='';
   FLAGEDIT := FALSE;
   FLAGUPLOAD := FALSE;
+  Label7.Visible := True;
+  dtAkhir.Visible := True;
   edtNIK.clear;
   dtMulai.Date := Date;
   dtAkhir.Date := Date;
@@ -212,6 +213,8 @@ begin
       if not Eof then
       begin
         FLAGEDIT := True;
+        Label7.Visible := False;
+        dtAkhir.Visible := False;
         edtNIK.Text := fieldbyname('kar_nik').AsString;
         dtMulai.Date := fieldbyname('tanggal').AsDateTime;
         dtAkhir.Date := fieldbyname('tanggal').AsDateTime;
@@ -299,82 +302,101 @@ begin
   EnsureConnected(frmMenu.MyConnection1);
   ExecSQLDirect(frmMenu.MyConnection1, s);}
 
-  tt := TStringList.Create;
-  try
-    atgl := dtMulai.Date;
-    i := 1;
+ if FLAGEDIT then
+ begin
+    s := 'UPDATE tijin SET '
+       + ' kar_nik = ' + Quot(edtNIK.Text) + ','
+       + ' tanggal = ' + QuotD(dtMulai.DateTime) + ','
+       + ' alasan = ' + Quot(cxLookupAlasan.Text) + ','
+       + ' keterangan = ' + Quot(edtKeterangan.Text) + ','
+       + ' ij_foto = ' + Quot(afoto)
+       + ' WHERE ij_nomor = ' + quot(FID) + ';';
+       
+    EnsureConnected(frmMenu.MyConnection1);
+    ExecSQLDirect(frmMenu.MyConnection1, s);
+ end
+  else
+  begin
+    tt := TStringList.Create;
+    try
+      atgl := dtMulai.Date;
+      i := 1;
 
-    while atgl <= dtAkhir.Date do
-    begin
-      ShowMessage(DateToStr(atgl));
-      if not IsHariLibur(atgl, JAMKERJA) then
+      while atgl <= dtAkhir.Date do
       begin
-        anomor := getmaxkode(atgl, i);
+        if not IsHariLibur(atgl, JAMKERJA) then
+        begin
+          anomor := getmaxkode(atgl, i);
 
-        s := 'INSERT INTO tijin '
-           + ' (ij_nomor, kar_nik, tanggal, alasan, keterangan, ij_foto) '
-           + ' VALUES ( '
-           + Quot(anomor) + ','
-           + Quot(edtNIK.Text) + ','
-           + QuotD(atgl) + ','
-           + Quot(cxLookupAlasan.Text) + ','
-           + Quot(edtKeterangan.Text) + ','
-           + Quot(afoto)
-           + ');';
+          s := 'INSERT INTO tijin '
+             + ' (ij_nomor, kar_nik, tanggal, alasan, keterangan, ij_foto) '
+             + ' VALUES ( '
+             + Quot(anomor) + ','
+             + Quot(edtNIK.Text) + ','
+             + QuotD(atgl) + ','
+             + Quot(cxLookupAlasan.Text) + ','
+             + Quot(edtKeterangan.Text) + ','
+             + Quot(afoto)
+             + ');';
 
-        tt.Append(s);
-        Inc(i);
+          tt.Append(s);
+          Inc(i);
+        end;
+
+        atgl := atgl + 1;
       end;
 
-      atgl := atgl + 1;
+      for i := 0 to tt.Count - 1 do
+      begin
+        EnsureConnected(frmMenu.MyConnection1);
+        ExecSQLDirect(frmMenu.MyConnection1, tt[i]);
+      end;
+    finally
+      tt.Free;
     end;
-
-    for i := 0 to tt.Count - 1 do
-    begin
-      EnsureConnected(frmMenu.MyConnection1);
-      ExecSQLDirect(frmMenu.MyConnection1, tt[i]);
-    end;
-  finally
-    tt.Free;
   end;
 end;
 
 function TfrmIjin.IsHariLibur(ATanggal: TDateTime; ATipe: string): Boolean;
 var
-  q: TmyQuery;
-  dayName: string;
+  dayName, s: string;
+  arc: Integer;
+  tsql: TmyQuery;
 begin
   Result := False;
 
   if SameText(ATipe, 'Normal') then
   begin
-    q := TmyQuery.Create(nil);
-    try
-      q.Connection := frmMenu.MyConnection1;
-      q.SQL.Text := 'SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
-      q.Open;
-      Result := q.FieldByName('jml').AsInteger > 0;
-    finally
-      q.Free;
+    s:= ' SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
+    EnsureConnected(frmMenu.MyConnection1);
+    tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
+    with tsql do
+    begin
+      try
+        Result := FieldByName('jml').AsInteger > 0;
+      finally
+        Free;
+      end;
     end;
   end;
 
   if SameText(ATipe, 'Shift libur') then
   begin
-    q := TmyQuery.Create(nil);
-    try
-      q.Connection := frmMenu.MyConnection1;
-      q.SQL.Text := 'SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
-      q.Open;
-      Result := q.FieldByName('jml').AsInteger > 0;
-    finally
-      q.Free;
+    s:= ' SELECT COUNT(*) AS jml FROM tharilibur WHERE hl_tanggal = ' + QuotD(ATanggal);
+    EnsureConnected(frmMenu.MyConnection1);
+    tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
+    with tsql do
+    begin
+      try
+        Result := FieldByName('jml').AsInteger > 0;
+      finally
+        Free;
+      end;
     end;
 
     if not Result then
     begin
-      dayName := FormatDateTime('ddd', ATanggal); // 'Sat' untuk Sabtu
-      if SameText(dayName, 'Sat') then
+      if DayOfWeek(ATanggal) = 7 then
         Result := True;
     end;
   end;

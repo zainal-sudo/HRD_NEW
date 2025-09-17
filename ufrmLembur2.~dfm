@@ -25,7 +25,7 @@ object frmLembur2: TfrmLembur2
     Left = 0
     Top = 41
     Width = 827
-    Height = 240
+    Height = 168
     Align = alTop
     BevelInner = bvRaised
     Color = clWhite
@@ -95,13 +95,6 @@ object frmLembur2: TfrmLembur2
       Height = 13
       Caption = 'Tanggal'
     end
-    object Label4: TLabel
-      Left = 18
-      Top = 62
-      Width = 56
-      Height = 13
-      Caption = 'Keterangan'
-    end
     object Label5: TLabel
       Left = 18
       Top = 12
@@ -110,15 +103,15 @@ object frmLembur2: TfrmLembur2
       Caption = 'Nomor'
     end
     object lbl2: TLabel
-      Left = 18
-      Top = 88
+      Left = 386
+      Top = 8
       Width = 68
       Height = 13
       Caption = 'Lampiran Foto'
     end
     object Image1: TImage
-      Left = 176
-      Top = 89
+      Left = 544
+      Top = 9
       Width = 121
       Height = 120
       Center = True
@@ -126,67 +119,6 @@ object frmLembur2: TfrmLembur2
       Proportional = True
       ShowHint = False
       Stretch = True
-    end
-    object edtKeterangan: TAdvEdit
-      Left = 103
-      Top = 62
-      Width = 306
-      Height = 21
-      AutoFocus = False
-      EditAlign = eaLeft
-      EditType = etString
-      ErrorMarkerPos = 0
-      ErrorMarkerLen = 0
-      ErrorColor = clRed
-      ErrorFontColor = clWhite
-      ExcelStyleDecimalSeparator = False
-      Flat = False
-      FlatLineColor = clBlack
-      FlatParentColor = True
-      FocusAlign = eaDefault
-      FocusBorder = False
-      FocusColor = clWindow
-      FocusFontColor = clWindowText
-      FocusLabel = False
-      FocusWidthInc = 0
-      ModifiedColor = clHighlight
-      DisabledColor = clSilver
-      URLColor = clBlue
-      ReturnIsTab = False
-      LengthLimit = 0
-      TabOnFullLength = False
-      Precision = 0
-      LabelPosition = lpLeftTop
-      LabelMargin = 4
-      LabelTransparent = False
-      LabelAlwaysEnabled = False
-      LabelFont.Charset = DEFAULT_CHARSET
-      LabelFont.Color = clWindowText
-      LabelFont.Height = -11
-      LabelFont.Name = 'Tahoma'
-      LabelFont.Style = []
-      Lookup.CaseSensitive = False
-      Lookup.Color = clWindow
-      Lookup.DisplayCount = 4
-      Lookup.Enabled = False
-      Lookup.History = False
-      Lookup.NumChars = 2
-      Lookup.Multi = False
-      Lookup.Separator = ';'
-      Persistence.Enable = False
-      Persistence.Location = plInifile
-      Color = clWhite
-      Enabled = True
-      HintShowLargeText = False
-      MaxLength = 30
-      OleDropTarget = False
-      OleDropSource = False
-      Signed = False
-      TabOrder = 2
-      Transparent = False
-      Visible = True
-      OnKeyDown = FormKeyDown
-      OnKeyPress = FormKeyPress
     end
     object dtTanggal: TDateTimePicker
       Left = 103
@@ -260,23 +192,23 @@ object frmLembur2: TfrmLembur2
       OnKeyPress = FormKeyPress
     end
     object btn1: TcxButton
-      Left = 103
-      Top = 87
+      Left = 471
+      Top = 7
       Width = 65
       Height = 25
       Caption = 'Upload'
-      TabOrder = 3
+      TabOrder = 2
       OnClick = btn1Click
       LookAndFeel.Kind = lfUltraFlat
       LookAndFeel.SkinName = 'LondonLiquidSky'
     end
     object Button1: TButton
       Left = 357
-      Top = 209
+      Top = 137
       Width = 180
       Height = 25
       Caption = 'Samakan Jam Awal dan Akhir'
-      TabOrder = 4
+      TabOrder = 3
       OnClick = Button1Click
     end
   end
@@ -572,9 +504,9 @@ object frmLembur2: TfrmLembur2
   end
   object AdvPanel4: TAdvPanel
     Left = 0
-    Top = 281
+    Top = 209
     Width = 827
-    Height = 220
+    Height = 292
     Align = alClient
     BevelInner = bvRaised
     Color = clWhite
@@ -641,7 +573,7 @@ object frmLembur2: TfrmLembur2
       Left = 2
       Top = 2
       Width = 823
-      Height = 216
+      Height = 288
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -699,6 +631,10 @@ object frmLembur2: TfrmLembur2
           PropertiesClassName = 'TcxTimeEditProperties'
           Properties.OnEditValueChanged = clJamAkhirPropertiesEditValueChanged
           Width = 134
+        end
+        object clKeterangan: TcxGridDBColumn
+          DataBinding.FieldName = 'keterangan'
+          Width = 200
         end
         object clDurasi: TcxGridDBColumn
           Caption = 'Durasi'
