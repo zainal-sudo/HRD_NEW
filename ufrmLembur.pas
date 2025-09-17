@@ -514,9 +514,9 @@ var
   arc: Integer;
 begin
   s:= 'SELECT a.kar_nama, b.nm_dept, c.nm_jabat '
-      + ' FROM karyawan a '
-      + ' INNER JOIN tdept b ON a.kar_dep_kode = b.kd_dept '
-      + ' INNER JOIN tjabatan c ON a.kar_jab_kode = c.kd_jabat '
+      + ' FROM tkaryawan a '
+      + ' INNER JOIN tdept b ON a.kar_kd_dept = b.kd_dept '
+      + ' INNER JOIN tjabatan c ON a.kar_kd_jabat = c.kd_jabat '
       + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
   EnsureConnected(frmMenu.MyConnection1);
   tsql := xOpenQuery(s, arc, frmMenu.myconnection1);

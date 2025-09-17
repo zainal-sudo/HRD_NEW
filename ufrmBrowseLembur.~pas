@@ -26,6 +26,7 @@ type
     cxStyleRepository1: TcxStyleRepository;
     cxStyle1: TcxStyle;
     cxButton5: TcxButton;
+    cxButton9: TcxButton;
   procedure btnRefreshClick(Sender: TObject);
   procedure FormShow(Sender: TObject);
   procedure cxButton2Click(Sender: TObject);
@@ -36,6 +37,7 @@ type
       Sender: TcxCustomGridTableView; ARecord: TcxCustomGridRecord;
       AItem: TcxCustomGridTableItem; out AStyle: TcxStyle);
     procedure cxButton5Click(Sender: TObject);
+    procedure cxButton9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,7 +48,7 @@ var
   frmBrowseLembur: TfrmBrowseLembur;
 
 implementation
-   uses ufrmLembur, uModuleConnection, ufrmMenu, Ulib, uFrmPreviewImage;
+   uses ufrmLembur, ufrmLembur2, uModuleConnection, ufrmMenu, Ulib, uFrmPreviewImage;
 {$R *.dfm}
 
 procedure TfrmBrowseLembur.btnRefreshClick(Sender: TObject);
@@ -56,9 +58,9 @@ begin
                     + ' , MAX(CASE WHEN f.status_absen IN (1,2) THEN TIME(f.tanggal) END) AS Jam_out, a.lem_poin Poin, a.lem_durasi Durasi, a.lem_foto foto '
                     + ' FROM tlembur a '
                     + ' INNER JOIN tkaryawan b ON a.lem_kar_nik = b.kar_nik '
-                    + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
-                    + ' INNER JOIN tdept d ON d.kd_dept = b.kar_kd_dept '
-                    + ' INNER JOIN tunit e ON e.kd_unit = b.kar_kd_unit '
+                    + ' LEFT JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
+                    + ' LEFT JOIN tdept d ON d.kd_dept = b.kar_kd_dept '
+                    + ' LEFT JOIN tunit e ON e.kd_unit = b.kar_kd_unit '
                     + ' LEFT JOIN tabsensitampung f ON (f.kar_nik = a.lem_kar_nik AND DATE(f.tanggal) = a.lem_tanggal) '
                     + ' WHERE b.kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT)
                     + ' AND a.lem_tanggal between ' + QuotD(startdate.DateTime) + ' and ' + QuotD(enddate.DateTime)
@@ -79,7 +81,8 @@ begin
   cxGrdMaster.Columns[10].Width :=100;
   cxGrdMaster.Columns[11].Width :=100;
   cxGrdMaster.Columns[11].Summary.FooterKind:=skSum;
-  cxGrdMaster.Columns[12].Visible := False;
+  cxGrdMaster.Columns[12].Width :=100;
+  cxGrdMaster.Columns[13].Visible := False;
 
 end;
 
@@ -100,7 +103,7 @@ begin
     frmlembur  := frmmenu.ShowForm(TfrmLembur) as TfrmLembur;
     frmlembur.edtNIK.SetFocus;
   end;
-  
+
   frmlembur.Show;
 end;
 
@@ -221,6 +224,20 @@ begin
   Application.CreateForm(TfrmPrevImg, frmprevimg);
   frmprevimg.foto := CDSMaster.FieldByname('foto').AsString;
   frmprevimg.ShowModal;
+end;
+
+procedure TfrmBrowseLembur.cxButton9Click(Sender: TObject);
+var
+  frmlembur2: TfrmLembur2;
+begin
+  inherited;
+  if ActiveMDIChild.Caption <> 'Lembur' then
+  begin
+    frmlembur2 := frmmenu.ShowForm(TfrmLembur2) as TfrmLembur2;
+    frmlembur2.dtTanggal.SetFocus;
+  end;
+
+  frmlembur2.Show;
 end;
 
 end.

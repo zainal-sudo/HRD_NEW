@@ -560,12 +560,12 @@ begin
   Poin := HitungPoin(dtJamMulai.Time, dtJamAkhir.Time);
   edtPoin.Text := FloatToStr(Poin);
 
-  edtSelisih.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
+  edtDurasi.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
 end;
 
 procedure TfrmLembur.dtJamMulaiChange(Sender: TObject);
 begin
-  edtSelisih.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
+  edtDurasi.Text := HitungDurasi(dtJamMulai.Time, dtJamAkhir.Time);
 end;
 
 end.

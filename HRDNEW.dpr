@@ -24,7 +24,8 @@ uses
   ufrmBrowseLembur in 'ufrmBrowseLembur.pas' {frmBrowseLembur},
   ufrmLembur in 'ufrmLembur.pas' {frmLembur},
   uFrmPreviewImage in 'bantu\uFrmPreviewImage.pas' {frmPrevImg},
-  ufrmLapRekapAbsensi in 'ufrmLapRekapAbsensi.pas' {frmLapRekapAbsensi};
+  ufrmLapRekapAbsensi in 'ufrmLapRekapAbsensi.pas' {frmLapRekapAbsensi},
+  ufrmLembur2 in 'ufrmLembur2.pas' {frmLembur2};
 
 {$R *.res}
 

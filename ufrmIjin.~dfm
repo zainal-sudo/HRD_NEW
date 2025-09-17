@@ -162,6 +162,13 @@ object frmIjin: TfrmIjin
       Height = 13
       Caption = 'Nama'
     end
+    object Label7: TLabel
+      Left = 232
+      Top = 40
+      Width = 4
+      Height = 13
+      Caption = '-'
+    end
     object edtKeterangan: TAdvEdit
       Left = 103
       Top = 182
@@ -223,7 +230,7 @@ object frmIjin: TfrmIjin
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
     end
-    object dtTanggal: TDateTimePicker
+    object dtMulai: TDateTimePicker
       Left = 103
       Top = 36
       Width = 122
@@ -231,7 +238,7 @@ object frmIjin: TfrmIjin
       Date = 45899.369493425930000000
       Time = 45899.369493425930000000
       TabOrder = 1
-      OnChange = dtTanggalChange
+      OnChange = dtMulaiChange
     end
     object cxLookupAlasan: TcxExtLookupComboBox
       Left = 104
@@ -715,6 +722,16 @@ object frmIjin: TfrmIjin
       Visible = True
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
+    end
+    object dtAkhir: TDateTimePicker
+      Left = 243
+      Top = 36
+      Width = 122
+      Height = 21
+      Date = 45899.369493425930000000
+      Time = 45899.369493425930000000
+      TabOrder = 10
+      OnChange = dtMulaiChange
     end
   end
   object AdvPanel3: TAdvPanel

@@ -49,10 +49,10 @@ begin
   Self.SQLMaster := 'SELECT a.ij_nomor Nomor, a.kar_nik NIK, b.kar_nama Nama, c.nm_jabat Jabatan, d.nm_dept Departmen, e.nm_unit Unit, '
                     + ' tanggal Tanggal, alasan Alasan, keterangan Keterangan, a.ij_foto foto '
                     + ' FROM tijin a '
-                    + ' INNER JOIN tkaryawan b ON a.kar_nik = b.kar_nik '
-                    + ' INNER JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
-                    + ' INNER JOIN tdept d ON d.kd_dept = b.kar_kd_dept '
-                    + ' INNER JOIN tunit e ON e.kd_unit = b.kar_kd_unit '
+                    + ' LEFT JOIN tkaryawan b ON a.kar_nik = b.kar_nik '
+                    + ' LEFT JOIN tjabatan c ON c.kd_jabat = b.kar_kd_jabat '
+                    + ' LEFT JOIN tdept d ON d.kd_dept = b.kar_kd_dept '
+                    + ' LEFT JOIN tunit e ON e.kd_unit = b.kar_kd_unit '
                     + ' WHERE b.kar_kd_unit LIKE ' + Quot(frmMenu.KDUNIT)
                     + ' AND a.tanggal between ' + QuotD(startdate.DateTime) + ' and ' + QuotD(enddate.DateTime);
   inherited;

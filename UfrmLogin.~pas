@@ -138,7 +138,7 @@ begin
         frmmenu.Enabled := true;
 
         frmmenu.KDUSER := Fields[0].AsString;
-        if Fields[1].AsString = '18' then
+        if Fields[0].AsString = 'pusat' then
           frmmenu.KDUNIT := '%'
         else
           frmmenu.KDUNIT := Fields[1].AsString;
@@ -266,7 +266,7 @@ var
   tsql: TMyQuery;
   arc: Integer;
 begin
-  s:='select nm_unit from tunit where kd_unit = '+Quot(aUnit);
+  s:='select nm_unit,  from tunit where kd_unit = '+Quot(aUnit);
   tsql:=xOpenQuery(S, arc, frmMenu.MyConnection1);
   with tsql do
   begin
@@ -277,6 +277,7 @@ begin
 //        frmMenu.NMCABANG := Fields[1].AsString;
 //
 //        edtCabang.Text := Fields[1].AsString;
+        frmMenu.TPLIBUR := Fields[1].AsString;
         frmMenu.StatusBar1.Panels[3].Text := Fields[0].AsString;
       end;
     finally
