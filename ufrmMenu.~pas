@@ -78,7 +78,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    KDUSER, KDUNIT, aurl:string;
+    KDUSER, KDUNIT, aurl, TPLIBUR:string;
   end;
 
 var

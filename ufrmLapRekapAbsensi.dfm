@@ -547,6 +547,11 @@ object frmLapRekapAbsensi: TfrmLapRekapAbsensi
           Options.Editing = False
           Width = 100
         end
+        object clInsentifMalam: TcxGridDBColumn
+          Caption = 'Insentif Malam'
+          DataBinding.FieldName = 'InsentifMalam'
+          Options.Editing = False
+        end
       end
       object cxGrid1Level1: TcxGridLevel
         GridView = cxGridLembur

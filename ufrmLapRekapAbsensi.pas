@@ -60,6 +60,7 @@ type
     clJamLembur: TcxGridDBColumn;
     clPoinLembur: TcxGridDBColumn;
     clCutiKhusus: TcxGridDBColumn;
+    clInsentifMalam: TcxGridDBColumn;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -127,7 +128,7 @@ var
   tsql : TmyQuery;
   aterjadwal, atidakterjadwal: Integer;
 begin
-  s := 'call rekap_absensi('+quotd(startdate.date)+','+quotd(enddate.date)+','+quot(frmMenu.KDUNIT)+');';
+  s := 'call rekap_absensiv2('+quotd(startdate.date)+','+quotd(enddate.date)+','+quot(frmMenu.KDUNIT)+');';
   MyQuery1.Close;
   MyQuery1.SQL.Text := s;
   MyQuery1.Open;
@@ -154,8 +155,9 @@ begin
         CDSLembur.fieldbyname('CutiKhusus').asstring := fieldbyname('CutiKhusus').AsString;
         CDSLembur.fieldbyname('Sakit').asstring := fieldbyname('Sakit').AsString;
         CDSLembur.fieldbyname('Keterangan').asstring := fieldbyname('Keterangan').AsString;
-        CDSLembur.fieldbyname('JamLembur').asstring := FormatDateTime('hh:nn:ss', FieldByName('TotalJamLembur').AsDateTime);
+        CDSLembur.FieldByName('JamLembur').AsString := FieldByName('TotalJamLembur').AsString;
         CDSLembur.fieldbyname('PoinLembur').asstring := fieldbyname('TotalPoinLembur').AsString;
+        CDSLembur.fieldbyname('InsentifMalam').asstring := fieldbyname('InsentifMalam').AsString;
         CDSLembur.Post;
 
         i := i + 1;
@@ -201,6 +203,7 @@ begin
     zAddField(FCDSLembur, 'Keterangan', ftString, False,200);
     zAddField(FCDSLembur, 'JamLembur', ftString, False,100);
     zAddField(FCDSLembur, 'PoinLembur', ftString, False,30);
+    zAddField(FCDSLembur, 'InsentifMalam', ftString, False,20);
 
     FCDSLembur.CreateDataSet;
   end;

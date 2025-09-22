@@ -716,6 +716,14 @@ object frmIjin: TfrmIjin
       OnKeyDown = FormKeyDown
       OnKeyPress = FormKeyPress
     end
+    object cbShift: TcxCheckBox
+      Left = 231
+      Top = 157
+      Caption = 'Shift Malam'
+      TabOrder = 10
+      Visible = False
+      Width = 121
+    end
   end
   object AdvPanel3: TAdvPanel
     Left = 0

@@ -16,7 +16,7 @@ uses
   dxSkinSummer2008, dxSkinValentine, dxSkinXmas2008Blue, cxControls,
   cxContainer, cxEdit, cxTextEdit, cxMaskEdit, cxDropDownEdit,
   cxLookupEdit, cxDBLookupEdit, cxDBExtLookupComboBox, DBClient,
-  IdHTTP, IdMultipartFormData, JPEG, AdvEdBtn, cxGroupBox;
+  IdHTTP, IdMultipartFormData, JPEG, AdvEdBtn, cxGroupBox, cxCheckBox;
 
 type
   TfrmIjin = class(TForm)
@@ -52,6 +52,7 @@ type
     edtJabatan: TAdvEdit;
     lbl5: TLabel;
     edtNama: TAdvEdit;
+    cbShift: TcxCheckBox;
     procedure refreshdata;
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -111,6 +112,8 @@ begin
   edtKeterangan.Clear;
   Image1.Picture := nil;
   edtNomor.Text := getmaxkode;
+  cbShift.Checked := False;
+  cbShift.Visible := False;
   edtNIK.SetFocus;
 end;
 
@@ -212,6 +215,8 @@ begin
         edtKeterangan.Text := fieldbyname('keterangan').AsString;
         Image1.Hint := fieldbyname('ij_foto').AsString;
         FID := fieldbyname('ij_nomor').Asstring;
+        cbShift.Checked := false;
+        if FieldByName('ij_shift').AsString = '1' then cbShift.Checked := True;
 
         detailkaryawan;
         ShowAbsensi;
@@ -231,6 +236,7 @@ end;
 procedure TfrmIjin.simpandata(afoto:string);
 var
   s:string;
+  arc: Integer;
 begin
 //  if FLAGUPLOAD then
 //  begin
@@ -267,24 +273,26 @@ begin
        + ' tanggal = ' + QuotD(dtTanggal.DateTime) + ','
        + ' alasan = ' + Quot(cxLookupAlasan.Text) + ','
        + ' keterangan = ' + Quot(edtKeterangan.Text) + ','
-       + ' ij_foto = ' + Quot(afoto)
+       + ' ij_foto = ' + Quot(afoto) + ','
+       + ' ij_shift = ' + IfThen(cbShift.Checked, '1', '0')
        + ' WHERE ij_nomor = ' + quot(FID) + ';'
   else
   begin
     edtNomor.Text := getmaxkode;
       
     s := 'INSERT INTO tijin '
-       + ' (ij_nomor, kar_nik, tanggal, alasan, keterangan, ij_foto) '
+       + ' (ij_nomor, kar_nik, tanggal, alasan, keterangan, ij_foto, ij_shift) '
        + ' VALUES ( '
        + Quot(edtNomor.Text) + ','
        + Quot(edtNIK.Text) + ','
        + QuotD(dtTanggal.DateTime) + ','
        + Quot(cxLookupAlasan.Text) + ','
        + Quot(edtKeterangan.Text)  + ','
-       + Quot(afoto)
+       + Quot(afoto) + ','
+       + IfThen(cbShift.Checked, '1', '0')
        + ');';
   end;
-  
+
   EnsureConnected(frmMenu.MyConnection1);
   ExecSQLDirect(frmMenu.MyConnection1, s);
 end;
@@ -563,11 +571,13 @@ var
   tsql: TmyQuery;
   arc: Integer;
 begin
-  s:= 'SELECT a.kar_nama, b.nm_dept, c.nm_jabat '
-      + ' FROM karyawan a '
-      + ' INNER JOIN tdept b ON a.kar_dep_kode = b.kd_dept '
-      + ' INNER JOIN tjabatan c ON a.kar_jab_kode = c.kd_jabat '
-      + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
+  s:= ' SELECT a.kar_nama, b.nm_dept, c.nm_jabat, u.kd_unit '
+    + ' FROM tkaryawan a '
+    + ' LEFT JOIN tdept b ON a.kar_kd_dept = b.kd_dept '
+    + ' LEFT JOIN tjabatan c ON a.kar_kd_jabat = c.kd_jabat '
+    + ' LEFT JOIN tunit u ON u.kd_unit = a.kar_kd_unit '
+    + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
+    
   EnsureConnected(frmMenu.MyConnection1);
   tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
   with tsql do
@@ -578,6 +588,8 @@ begin
         edtNama.Text := FieldByName('kar_nama').AsString;
         edtDepartemen.Text := FieldByName('nm_dept').AsString;
         edtJabatan.Text := FieldByName('nm_jabat').AsString;
+        cbShift.Visible := False;
+        if FieldByName('kd_unit').AsString = '20' then cbShift.Visible := True;
       end;
     finally
       Free;
