@@ -89,15 +89,21 @@ begin
                     + ' base_absen AS ( '
                     + '     SELECT  '
                     + '         d.dt, emp.kar_nik, '
-                    + '         MIN(CASE WHEN e.status_absen = 1 THEN TIME(e.tanggal) END) AS jam_in, '
-                    + '         MAX(CASE WHEN e.status_absen IN (1,2) THEN TIME(e.tanggal) END) AS jam_out '
+                    + '         MIN(CASE WHEN e.status_absen = 1 THEN e.tanggal END) AS jam_in, '
+                    + '         MAX(CASE WHEN e.status_absen IN (1,2) THEN e.tanggal END) AS jam_out '
                     + '     FROM dates d '
                     + '     CROSS JOIN (SELECT DISTINCT kar_nik FROM tabsensitampung WHERE kar_nik <> "") emp '
-                    + '     LEFT JOIN tabsensitampung e ON DATE(e.tanggal_kerja) = d.dt AND e.kar_nik = emp.kar_nik '
+                    + '     LEFT JOIN tkaryawan x ON x.kar_nik = emp.kar_nik '
+                    + '     LEFT JOIN tabsensitampung e ON ( '
+                    + '       (x.kar_kd_unit = "20"  AND e.tanggal_kerja = d.dt) '
+                    + '        OR (x.kar_kd_unit <> "20" AND DATE(e.tanggal) = d.dt) '
+                    + '     ) AND e.kar_nik = emp.kar_nik '
                     + '     GROUP BY d.dt, emp.kar_nik '
                     + ' ), '
                     + ' status_dasar AS ( '
-                    + '     SELECT b.dt, b.kar_nik, b.jam_in, b.jam_out, x.kar_nama, y.nm_jabat, z.nm_unit, z.jam_kerja, l.hl_tanggal, '
+                    + '     SELECT b.dt, b.kar_nik, DATE_FORMAT(b.jam_in, "%H:%i:%s")  AS jam_in, '
+                    + '     DATE_FORMAT(b.jam_out, "%H:%i:%s") AS jam_out, '
+                    + '     x.kar_nama, y.nm_jabat, z.nm_unit, z.jam_kerja, l.hl_tanggal, '
                     + '         CASE  '
                     + '             WHEN z.jam_kerja = "shift full" THEN '
                     + '                 CASE  '
@@ -128,7 +134,7 @@ begin
                     + ' SELECT '
                     + '     s.dt AS Tanggal, DAYNAME(s.dt) AS Hari, s.kar_nik AS Nik, s.kar_nama AS Nama, s.nm_jabat AS Jabatan, s.nm_unit AS Nama_Unit, '
                     + '     s.jam_in AS Jam_in, s.jam_out AS Jam_out, s.keterangan AS Keterangan, COALESCE(i.alasan, s.keterangan) AS Payroll, i.ij_nomor AS NoIjin, '
-                    + '     i.ij_foto AS foto '
+                    + '     i.ij_foto AS foto, i.keterangan '
                     + ' FROM status_dasar s '
                     + ' LEFT JOIN tijin i ON i.kar_nik = s.kar_nik AND DATE(i.tanggal) = s.dt '
                    + ' ORDER BY s.kar_nik, s.dt';
@@ -144,6 +150,7 @@ begin
     cxGrdMaster.Columns[9].Width := 100;
     cxGrdMaster.Columns[10].Width := 100;
     cxGrdMaster.Columns[11].Visible := False;
+    cxGrdMaster.Columns[12].Width := 200;
 //    CDSMaster.FieldByName('Keterangan').Size := 200;
     CDSMaster.First;
 
