@@ -73,6 +73,7 @@ type
     procedure ShowAbsensi;
     procedure edtNIKChange(Sender: TObject);
     procedure detailkaryawan;
+    function cekdata: Boolean;
   private
     FCDSAlasan: TClientDataset;
     FFLAGEDIT: Boolean;
@@ -102,7 +103,6 @@ uses uModuleConnection, DB, ufrmMenu, Ulib, uFrmbantuan2;
 
 procedure TfrmIjin.refreshdata;
 begin
-
   FID:='';
   FLAGEDIT := FALSE;
   FLAGUPLOAD := FALSE;
@@ -308,15 +308,11 @@ var
   foto, Msg: String;
 begin
   try
+    If not cekdata then exit;
+
     if ((cxLookupAlasan.Text = 'Sakit') OR (cxLookupAlasan.Text = 'Masuk') OR (cxLookupAlasan.Text = 'Terlambat')) AND (Image1.Hint = '') then
     begin
       MessageDlg('Lampiran foto harus di isi', mtWarning, [mbOK],0);
-      Exit;
-    end;
-
-    if edtNIK.Text = '' then
-    begin
-      MessageDlg('NIK harus di isi', mtWarning, [mbOK],0);
       Exit;
     end;
 
@@ -367,15 +363,11 @@ var
   foto, Msg: String;
 begin
   try
+    If not cekdata then exit;
+    
     if ((cxLookupAlasan.Text = 'Sakit') OR (cxLookupAlasan.Text = 'Masuk') OR (cxLookupAlasan.Text = 'Terlambat')) AND (Image1.Hint = '') then
     begin
       MessageDlg('Lampiran foto harus di isi', mtWarning, [mbOK],0);
-      Exit;
-    end;
-      
-    if edtNIK.Text = '' then
-    begin
-      MessageDlg('NIK harus di isi',mtWarning, [mbOK],0);
       Exit;
     end;
 
@@ -577,7 +569,7 @@ begin
     + ' LEFT JOIN tjabatan c ON a.kar_kd_jabat = c.kd_jabat '
     + ' LEFT JOIN tunit u ON u.kd_unit = a.kar_kd_unit '
     + ' WHERE a.kar_nik = ' + Quot(edtNIK.Text);
-    
+
   EnsureConnected(frmMenu.MyConnection1);
   tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
   with tsql do
@@ -590,6 +582,50 @@ begin
         edtJabatan.Text := FieldByName('nm_jabat').AsString;
         cbShift.Visible := False;
         if FieldByName('kd_unit').AsString = '20' then cbShift.Visible := True;
+      end;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+function TfrmIjin.cekdata: Boolean;
+var
+  s: String;
+  tsql: TmyQuery;
+  arc: Integer;
+begin
+  result := True;
+
+  If edtNIK.Text = '' then
+  begin
+    ShowMessage('Karyawan belum di pilih');
+    result := False;
+    Exit;
+  end;
+
+  If VarIsNull(cxLookupAlasan.EditValue) then
+  begin
+    ShowMessage('Alasan belum di pilih');
+    result := False;
+    Exit;
+  end;
+
+  s:= ' SELECT 1 '
+    + ' FROM tijin '
+    + ' WHERE kar_nik = ' + Quot(edtNIK.Text)
+    + ' AND DATE(tanggal) = ' + QuotD(dtTanggal.DateTime);
+
+  EnsureConnected(frmMenu.MyConnection1);
+  tsql := xOpenQuery(s, arc, frmMenu.myconnection1);
+  with tsql do
+  begin
+    try
+      if not Eof then
+      begin
+        ShowMessage('Data izin karyawan ini pada tanggal yang sama sudah ada. Tidak bisa menambahkan dua kali.');
+        result := False;
+        Exit;
       end;
     finally
       Free;
