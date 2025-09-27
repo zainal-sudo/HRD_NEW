@@ -101,8 +101,8 @@ begin
                     + '     GROUP BY d.dt, emp.kar_nik '
                     + ' ), '
                     + ' status_dasar AS ( '
-                    + '     SELECT b.dt, b.kar_nik, DATE_FORMAT(b.jam_in, "%H:%i:%s")  AS jam_in, '
-                    + '     DATE_FORMAT(b.jam_out, "%H:%i:%s") AS jam_out, '
+                    + '     SELECT b.dt, b.kar_nik, b.jam_in, '
+                    + '     b.jam_out, '
                     + '     x.kar_nama, y.nm_jabat, z.nm_unit, z.jam_kerja, l.hl_tanggal, '
                     + '         CASE  '
                     + '             WHEN z.jam_kerja = "shift full" THEN '
@@ -120,7 +120,7 @@ begin
                     + '                 CASE  '
                     + '                     WHEN l.hl_tanggal IS NOT NULL THEN "" '
                     + '                     WHEN b.jam_in IS NULL AND b.jam_out IS NULL THEN "Potong Gaji" '
-                    + '                     WHEN b.jam_in >= "08:01:00" THEN "Terlambat" '
+                    + '                     WHEN TIME(b.jam_in) >= "08:01:00" THEN "Terlambat" '
                     + '                     ELSE "Masuk" '
                     + '                 END '
                     + '         END AS keterangan '
@@ -153,8 +153,6 @@ begin
     cxGrdMaster.Columns[12].Width := 200;
 //    CDSMaster.FieldByName('Keterangan').Size := 200;
     CDSMaster.First;
-
-
 end;
 
 procedure TfrmLapAbsensi.FormShow(Sender: TObject);

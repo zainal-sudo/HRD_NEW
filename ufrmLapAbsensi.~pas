@@ -101,7 +101,7 @@ begin
                     + '     GROUP BY d.dt, emp.kar_nik '
                     + ' ), '
                     + ' status_dasar AS ( '
-                    + '     SELECT b.dt, b.kar_nik, DATE_FORMAT(b.jam_in, "%H:%i:%s")  AS jam_in, '
+                    + '     SELECT b.dt, b.kar_nik, b.jam_in, '
                     + '     DATE_FORMAT(b.jam_out, "%H:%i:%s") AS jam_out, '
                     + '     x.kar_nama, y.nm_jabat, z.nm_unit, z.jam_kerja, l.hl_tanggal, '
                     + '         CASE  '
@@ -120,7 +120,7 @@ begin
                     + '                 CASE  '
                     + '                     WHEN l.hl_tanggal IS NOT NULL THEN "" '
                     + '                     WHEN b.jam_in IS NULL AND b.jam_out IS NULL THEN "Potong Gaji" '
-                    + '                     WHEN b.jam_in >= "08:01:00" THEN "Terlambat" '
+                    + '                     WHEN TIME(b.jam_in) >= "08:01:00" THEN "Terlambat" '
                     + '                     ELSE "Masuk" '
                     + '                 END '
                     + '         END AS keterangan '
@@ -134,7 +134,7 @@ begin
                     + ' SELECT '
                     + '     s.dt AS Tanggal, DAYNAME(s.dt) AS Hari, s.kar_nik AS Nik, s.kar_nama AS Nama, s.nm_jabat AS Jabatan, s.nm_unit AS Nama_Unit, '
                     + '     s.jam_in AS Jam_in, s.jam_out AS Jam_out, s.keterangan AS Keterangan, COALESCE(i.alasan, s.keterangan) AS Payroll, i.ij_nomor AS NoIjin, '
-                    + '     i.ij_foto AS foto, i.keterangan '
+                    + '     i.ij_foto AS foto, i.keterangan AS KeteranganIjin '
                     + ' FROM status_dasar s '
                     + ' LEFT JOIN tijin i ON i.kar_nik = s.kar_nik AND DATE(i.tanggal) = s.dt '
                    + ' ORDER BY s.kar_nik, s.dt';
@@ -153,8 +153,6 @@ begin
     cxGrdMaster.Columns[12].Width := 200;
 //    CDSMaster.FieldByName('Keterangan').Size := 200;
     CDSMaster.First;
-
-
 end;
 
 procedure TfrmLapAbsensi.FormShow(Sender: TObject);
